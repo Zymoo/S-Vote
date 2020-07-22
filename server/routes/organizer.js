@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
  * Sends part of the private one to to given addresses by email.
  * Saves election configuration on blockchain.
  * Sends back status OK or FAIL.
- * @param {emailAdresses}
+ * @param {emailAddresses}
  * @param {shamirNum}
  * @param {candidates}
  * @param {voters}
