@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
  * Sends back an authentication token, or FAIL in case of failed identity confirmation.
  * @returns {authToken}
  */
-router.get('/register', function(req, res, next) {
+router.post('/register', function(req, res, next) {
   res.send("FAIL");
 });
 
