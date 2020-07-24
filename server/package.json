@@ -3,7 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "stop": "forever stopall",
+    "start-server": "forever start ./bin/www",
+    "test": "node -v",
+    "node-test": "node -v"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
@@ -12,5 +16,10 @@
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "eslint": "^7.5.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-formatter-gitlab": "^2.0.0"
   }
 }

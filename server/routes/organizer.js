@@ -1,11 +1,11 @@
 /**
- * 
+ *
  * Defines organizer interface. Will require additional authetication.
- * 
+ *
  */
 
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 /* Debug purpose - sanity check */
 router.get('/', function(req, res, next) {
@@ -24,7 +24,7 @@ router.get('/', function(req, res, next) {
  * @returns {status}
  */
 router.post('/begin', function(req, res, next) {
-  res.send("FAIL");
+  res.send('FAIL');
 });
 
 /**
@@ -35,7 +35,7 @@ router.post('/begin', function(req, res, next) {
  * @returns {status}
  */
 router.post('/end', function(req, res, next) {
-  res.send("FAIL");
+  res.send('FAIL');
 });
 
 
