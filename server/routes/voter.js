@@ -1,11 +1,11 @@
 /**
- * 
+ *
  * Entry part of server - defines public interface for voters.
- * 
+ *
  */
 
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 /* Debug purpose - sanity check */
 router.get('/', function(req, res, next) {
@@ -14,11 +14,12 @@ router.get('/', function(req, res, next) {
 
 /**
  * Registration - requires confirmation through IDnow.
- * Sends back an authentication token, or FAIL in case of failed identity confirmation.
+ * Sends back an authentication token, or FAIL
+ * in case of failed identity confirmation.
  * @returns {authToken}
  */
 router.post('/register', function(req, res, next) {
-  res.send("FAIL");
+  res.send('FAIL');
 });
 
 /**
@@ -28,7 +29,7 @@ router.post('/register', function(req, res, next) {
  * @returns {status}
  */
 router.post('/keysave', function(req, res, next) {
-  res.send("FAIL");
+  res.send('FAIL');
 });
 
 module.exports = router;

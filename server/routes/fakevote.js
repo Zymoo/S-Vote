@@ -1,12 +1,13 @@
 /**
- * 
- * Temporary solution. Groups voting functionality which will be implemented ONLY in client eventually.
+ *
+ * Temporary solution. Groups voting functionality
+ * which will be implemented ONLY in client eventually.
  * This file will be deleted later in the process.
- * 
+ *
  */
 
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 /* Debug purpose - sanity check */
 router.get('/', function(req, res, next) {
@@ -14,11 +15,12 @@ router.get('/', function(req, res, next) {
 });
 
 /**
- * Mock voting interface. Shall get data from blockchain, choose candidate, encrypt the choice and
+ * Mock voting interface. Shall get data from blockchain,
+ * choose candidate, encrypt the choice and
  * send back to blokchain with ring signature.
  */
 router.post('/vote', function(req, res, next) {
-  res.send("FAIL");
+  res.send('FAIL');
 });
 
 
