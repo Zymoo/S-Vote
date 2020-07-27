@@ -6,6 +6,7 @@
 
 const express = require('express');
 const router = express.Router();
+const cryptography = require('../utilities/cryptography');
 
 /* Debug purpose - sanity check */
 router.get('/', function(req, res, next) {
@@ -14,7 +15,7 @@ router.get('/', function(req, res, next) {
 
 /**
  * Starts the registration phase. Creates election key pair.
- * Sends part of the private one to to given addresses by email.
+ * Sends part of the private key to given addresses by email.
  * Saves election configuration on blockchain.
  * Sends back status OK or FAIL.
  * @param {emailAddresses}
@@ -24,6 +25,10 @@ router.get('/', function(req, res, next) {
  * @returns {status}
  */
 router.post('/begin', function(req, res, next) {
+  cryptography.createKeys()
+  .then((result) => {
+    console.log("Keys generated");;
+  });
   res.send('FAIL');
 });
 
