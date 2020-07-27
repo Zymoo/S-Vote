@@ -26,9 +26,9 @@ router.get('/', function(req, res, next) {
  */
 router.post('/begin', function(req, res, next) {
   cryptography.createKeys()
-  .then((result) => {
-    console.log("Keys generated");;
-  });
+      .then((result) => {
+        console.log('Keys generated'); ;
+      });
   res.send('FAIL');
 });
 
