@@ -1,8 +1,16 @@
+/* eslint-disable prefer-const */
 const {Seal} = require('node-seal');
+const secrets = require('secrets.js-grempe');
 
 
 exports.createKeys = async function() {
   const Morfix = await Seal();
+
+  // //////////////////////
+  // Encryption Parameters
+  // //////////////////////
+
+  // Create a new EncryptionParameters
   const schemeType = Morfix.SchemeType.BFV;
   const securityLevel = Morfix.SecurityLevel.tc128;
   const polyModulusDegree = 4096;
@@ -11,30 +19,42 @@ exports.createKeys = async function() {
 
   const encParms = Morfix.EncryptionParameters(schemeType);
 
-  // Set the PolyModulusDegree
   encParms.setPolyModulusDegree(polyModulusDegree);
-  // Create a suitable set of CoeffModulus primes
   encParms.setCoeffModulus(
-      Morfix.CoeffModulus.Create(polyModulusDegree, Int32Array.from(bitSizes)),
+      Morfix.CoeffModulus.Create(
+          polyModulusDegree,
+          Int32Array.from(bitSizes),
+      ),
   );
-  // Set the PlainModulus to a prime of bitSize 20.
+
   encParms.setPlainModulus(
-      Morfix.PlainModulus.Batching(polyModulusDegree, bitSize),
+      Morfix.PlainModulus.Batching(
+          polyModulusDegree,
+          bitSize,
+      ),
   );
+
   const context = Morfix.Context(
-      parms, // Encryption Parameters
-      true, // ExpandModChain
-      securityLevel, // Enforce a security level
+      encParms,
+      false,
+      securityLevel,
   );
+
   if (!context.parametersSet()) {
-    throw new Error(
-        'Try different encryption parameters.',
-    );
+    throw new Error('Please try different encryption parameters.');
   }
 
-  const keyGenerator = Morfix.KeyGenerator(context);
+  const keyGenerator = Morfix.KeyGenerator(
+      context,
+  );
   const secretKey = keyGenerator.secretKey();
   const publicKey = keyGenerator.publicKey();
+  const secretBase64Key = secretKey.save();
+  const publicBase64Key = publicKey.save();
+  return [secretBase64Key, publicBase64Key];
+};
 
-  return (secretKey, publicKey);
+exports.partKey = function(key, n, k) {
+  const shares = secrets.share(secrets.str2hex(key), n, k);
+  return shares;
 };

@@ -17,6 +17,7 @@
     "jade": "~1.11.0",
     "morgan": "~1.9.1",
     "node-seal": "^4.3.8",
+    "nodemailer": "^6.4.10",
     "secrets.js-grempe": "^2.0.0"
   },
   "devDependencies": {

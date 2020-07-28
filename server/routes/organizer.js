@@ -7,6 +7,8 @@
 const express = require('express');
 const router = express.Router();
 const cryptography = require('../utilities/cryptography');
+const blockchain = require('../utilities/blockchain');
+const nodemailer = require('nodemailer');
 
 /* Debug purpose - sanity check */
 router.get('/', function(req, res, next) {
@@ -18,18 +20,55 @@ router.get('/', function(req, res, next) {
  * Sends part of the private key to given addresses by email.
  * Saves election configuration on blockchain.
  * Sends back status OK or FAIL.
- * @param {emailAddresses}
- * @param {shamirNum}
+ * @param {emails}
+ * @param {shamir}
  * @param {candidates}
  * @param {voters}
  * @returns {status}
  */
-router.post('/begin', function(req, res, next) {
-  cryptography.createKeys()
-      .then((result) => {
-        console.log('Keys generated'); ;
-      });
-  res.send('FAIL');
+router.post('/begin', async function(req, res, next) {
+  const emails = req.body.emails;
+  console.log('Emails:', emails);
+  const shamir = req.body.shamir;
+  console.log('Shamir:', shamir);
+  const candidates = req.body.candidates;
+  console.log('Candidates:', candidates);
+  const voters = req.body.voters;
+  console.log('Voters:', voters);
+
+  const transporter = nodemailer.createTransport({
+    host: 'smtp.mailtrap.io',
+    port: 2525,
+    auth: {
+      user: '28d4d8b9f0ef74',
+      pass: '5376cf56f28273',
+    },
+  });
+
+  const keys = await cryptography.createKeys();
+  console.log('Keys generated');
+  const privKey = keys[0];
+  const pubKey = keys[1];
+
+  const shares = cryptography.partKey(privKey, emails.length, parseInt(shamir));
+  shares.forEach((share, index) => {
+    const message = {
+      from: 'government@votenow.com',
+      to: emails[index],
+      subject: 'Secret Key Part',
+      text: JSON.stringify(share)};
+
+    transporter.sendMail(message, function(err, info) {
+      if (err) {
+        console.log('Couldnt send mail');
+      } else {
+        console.log('Mail was sent');
+      }
+    });
+  });
+
+  blockchain.saveConfig(pubKey, candidates, voters);
+  res.status(200).send('Seems everything worked');
 });
 
 /**
