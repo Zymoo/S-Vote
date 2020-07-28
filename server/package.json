@@ -17,7 +17,8 @@
     "jade": "~1.11.0",
     "morgan": "~1.9.1",
     "node-seal": "^4.3.8",
-    "secrets.js-grempe": "^2.0.0"
+    "secrets.js-grempe": "^2.0.0",
+    "web3": "^1.2.11"
   },
   "devDependencies": {
     "eslint": "^7.5.0",
