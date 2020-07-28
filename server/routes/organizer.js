@@ -7,6 +7,7 @@
 const express = require('express');
 const router = express.Router();
 const cryptography = require('../utilities/cryptography');
+const Web3 = require('web3');
 
 /* Debug purpose - sanity check */
 router.get('/', function(req, res, next) {
@@ -29,6 +30,14 @@ router.post('/begin', function(req, res, next) {
       .then((result) => {
         console.log('Keys generated'); ;
       });
+
+  //port and account address hardcoded
+  let web3 = new Web3('ws://localhost:8032');
+  //web3.setProvider('ws://localhost:8032');
+  web3.eth.personal.unlockAccount("0x42F330204c09546E066BE1478006B034155f2f91", "")
+    .then(console.log('Account unlocked!'));
+  //console.log(web3.personal.listAccounts);
+  
   res.send('FAIL');
 });
 
