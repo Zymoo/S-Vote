@@ -4,6 +4,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const crypto = require('crypto');
+const mongoose = require('mongoose');
 
 const indexRouter = require('./routes/index');
 const voterRouter = require('./routes/voter');
@@ -14,6 +15,11 @@ const app = express();
 
 app.locals.database = {description: 'Looking good'};
 app.locals.token = crypto.randomBytes(64).toString('hex');
+
+const mongoDB = 'mongodb+srv://server:4HyymKiNqmP3yDR@cluster0.orhvk.mongodb.net/SvoteBase?retryWrites=true&w=majority';
+mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
+app.locals.db = mongoose.connection;
+app.locals.db.on('error', console.error.bind(console, 'MongoDBerror:'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

@@ -67,7 +67,8 @@ router.post('/begin', async function(req, res, next) {
     });
   });
 
-  blockchain.saveConfig(pubKey, candidates, voters);
+  await blockchain.saveConfig(pubKey, candidates, voters);
+  // await blockchain.printBlockchain();
   res.status(200).send('Seems everything worked');
 });
 
