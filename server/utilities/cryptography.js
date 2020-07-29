@@ -5,12 +5,6 @@ const secrets = require('secrets.js-grempe');
 
 exports.createKeys = async function() {
   const Morfix = await Seal();
-
-  // //////////////////////
-  // Encryption Parameters
-  // //////////////////////
-
-  // Create a new EncryptionParameters
   const schemeType = Morfix.SchemeType.BFV;
   const securityLevel = Morfix.SecurityLevel.tc128;
   const polyModulusDegree = 4096;

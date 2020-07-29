@@ -3,6 +3,7 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const crypto = require('crypto');
 
 const indexRouter = require('./routes/index');
 const voterRouter = require('./routes/voter');
@@ -12,6 +13,7 @@ const fakevoteRouter = require('./routes/fakevote');
 const app = express();
 
 app.locals.database = {description: 'Looking good'};
+app.locals.token = crypto.randomBytes(64).toString('hex');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
