@@ -48,18 +48,12 @@ exports.saveResult = async function(result) {
 };
 
 exports.saveVote = async function(vote) {
-  const voteTransaction = JSON.stringify(vote);
+  const voteTransaction = vote;
   const block = new Block({
     tag: 'vote',
     content: voteTransaction,
   });
   await block.save();
-};
-
-exports.getEncryptedVotes = async function() {
-  const data = await Block.find();
-  const blockchain = data.map((block) => JSON.parse(block));
-  return blockchain;
 };
 
 exports.getTaggedBlockchain = async function(tag) {

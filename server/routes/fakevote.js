@@ -23,7 +23,6 @@ router.get('/', function(req, res, next) {
  * @param candidate
  */
 router.post('/vote', async function(req, res, next) {
-  console.log('VOTE');
   const chosenCandidate = req.body.candidate;
   const candidates = await blockchain.getTaggedBlockchain('candidate');
   console.log(candidates);

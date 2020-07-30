@@ -68,8 +68,7 @@ router.post('/begin', async function(req, res, next) {
   });
 
   await blockchain.saveConfig(pubKey, candidates, voters);
-  // await blockchain.printBlockchain();
-  res.status(200).send('Seems everything worked');
+  res.status(200).send(privKey);
 });
 
 /**
@@ -79,8 +78,17 @@ router.post('/begin', async function(req, res, next) {
  * @param {privKey}
  * @returns {status}
  */
-router.post('/end', function(req, res, next) {
-  res.send('FAIL');
+router.post('/end', async function(req, res, next) {
+  req.app.locals.shares.add(req.body.share);
+  if (req.app.locals.shares.size >= 3) {
+    const votes = await blockchain.getTaggedBlockchain('vote');
+    const resultcipher = await cryptography.multiplyVotes(votes);
+    const privKey = cryptography.combineKey(Array.from(req.app.locals.shares));
+    const result = cryptography.decryptResult(resultcipher, privKey);
+    console.log(result);
+    return res.status(200).send(result.toString());
+  }
+  res.status(200).send('Got your part!');
 });
 
 
