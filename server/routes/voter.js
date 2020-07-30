@@ -7,6 +7,7 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const blockchain = require('../utilities/blockchain');
 
 /* Debug purpose - sanity check */
 router.get('/', function(req, res, next) {
@@ -49,6 +50,7 @@ function authenticateToken(req, res, next) {
 router.post('/keysave', authenticateToken, function(req, res, next) {
   const pubKey = req.body.pubKey;
   console.log('Public key:', pubKey);
+  blockchain.saveVoterKey(pubKey);
   res.send('Passed authentication & saved key on the blockchain');
 });
 

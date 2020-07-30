@@ -2,7 +2,6 @@
 const {Seal} = require('node-seal');
 const secrets = require('secrets.js-grempe');
 
-
 exports.createKeys = async function() {
   const Morfix = await Seal();
   const schemeType = Morfix.SchemeType.BFV;
@@ -10,9 +9,7 @@ exports.createKeys = async function() {
   const polyModulusDegree = 1024; // 4096
   const bitSizes = [27]; // [36, 36, 37];
   const bitSize = 20;
-
   const encParms = Morfix.EncryptionParameters(schemeType);
-
   encParms.setPolyModulusDegree(polyModulusDegree);
   encParms.setCoeffModulus(
       Morfix.CoeffModulus.Create(
@@ -20,24 +17,20 @@ exports.createKeys = async function() {
           Int32Array.from(bitSizes),
       ),
   );
-
   encParms.setPlainModulus(
       Morfix.PlainModulus.Batching(
           polyModulusDegree,
           bitSize,
       ),
   );
-
   const context = Morfix.Context(
       encParms,
       false,
       securityLevel,
   );
-
   if (!context.parametersSet()) {
     throw new Error('Please try different encryption parameters.');
   }
-
   const keyGenerator = Morfix.KeyGenerator(
       context,
   );
@@ -51,4 +44,44 @@ exports.createKeys = async function() {
 exports.partKey = function(key, n, k) {
   const shares = secrets.share(secrets.str2hex(key), n, k);
   return shares;
+};
+
+exports.encryptVote = async function(key, vote) {
+  const Morfix = await Seal();
+  const schemeType = Morfix.SchemeType.BFV;
+  const securityLevel = Morfix.SecurityLevel.none; // Morfix.SecurityLevel.tc128
+  const polyModulusDegree = 1024; // 4096
+  const bitSizes = [27]; // [36, 36, 37];
+  const bitSize = 20;
+  const encParms = Morfix.EncryptionParameters(schemeType);
+  encParms.setPolyModulusDegree(polyModulusDegree);
+  encParms.setCoeffModulus(
+      Morfix.CoeffModulus.Create(
+          polyModulusDegree,
+          Int32Array.from(bitSizes),
+      ),
+  );
+  encParms.setPlainModulus(
+      Morfix.PlainModulus.Batching(
+          polyModulusDegree,
+          bitSize,
+      ),
+  );
+  const context = Morfix.Context(
+      encParms,
+      false,
+      securityLevel,
+  );
+  if (!context.parametersSet()) {
+    throw new Error('Please try different encryption parameters.');
+  }
+
+  const publicKey = Morfix.PublicKey();
+  publicKey.load(context, key.toString());
+
+  const encryptor = Morfix.Encryptor(context, publicKey);
+  const encoder = Morfix.IntegerEncoder(context);
+  const plaintext = encoder.encodeInt32(parseInt(vote));
+  const encryptedVote = encryptor.encrypt(plaintext);
+  return encryptedVote.save();
 };
