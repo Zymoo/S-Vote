@@ -18,8 +18,13 @@ exports.saveVoterKey = async function(pubKey) {
   await block.save();
 };
 
-exports.saveResult = async function() {
-
+exports.saveResult = async function(result) {
+  const resultTransaction = JSON.stringify(pubKey);
+  const block = new Block({
+    tag: 'result',
+    content: resultTransaction,
+  });
+  await block.save();
 };
 
 exports.saveVote = async function(vote) {
@@ -45,7 +50,7 @@ exports.getBlockchain = async function() {
 
 exports.printBlockchain = async function() {
   const data = await Block.find();
-  const blockchain = data.map((block) => JSON.parse(block));
+  const blockchain = data.map((block) => JSON.parse(block.content));
   blockchain.forEach((element) => {
     console.log(element);
   });
