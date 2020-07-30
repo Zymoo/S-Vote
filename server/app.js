@@ -3,6 +3,8 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const crypto = require('crypto');
+const mongoose = require('mongoose');
 
 const indexRouter = require('./routes/index');
 const voterRouter = require('./routes/voter');
@@ -12,14 +14,21 @@ const fakevoteRouter = require('./routes/fakevote');
 const app = express();
 
 app.locals.database = {description: 'Looking good'};
+app.locals.token = crypto.randomBytes(64).toString('hex');
+app.locals.shares = new Set();
+
+const mongoDB = 'mongodb+srv://server:4HyymKiNqmP3yDR@cluster0.orhvk.mongodb.net/SvoteBase?retryWrites=true&w=majority';
+mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
+app.locals.db = mongoose.connection;
+app.locals.db.on('error', console.error.bind(console, 'MongoDBerror:'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.json({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb', extended: true}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 

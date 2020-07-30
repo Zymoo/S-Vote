@@ -8,6 +8,8 @@
 
 const express = require('express');
 const router = express.Router();
+const blockchain = require('../utilities/blockchain');
+const cryptography = require('../utilities/cryptography');
 
 /* Debug purpose - sanity check */
 router.get('/', function(req, res, next) {
@@ -18,9 +20,28 @@ router.get('/', function(req, res, next) {
  * Mock voting interface. Shall get data from blockchain,
  * choose candidate, encrypt the choice and
  * send back to blokchain with ring signature.
+ * @param candidate
  */
-router.post('/vote', function(req, res, next) {
-  res.send('FAIL');
+router.post('/vote', async function(req, res, next) {
+  const chosenCandidate = req.body.candidate;
+  const candidates = await blockchain.getTaggedBlockchain('candidate');
+  console.log(candidates);
+  const electionKey = await blockchain.getTaggedBlockchain('electionkey');
+  console.log(electionKey);
+  for (const candidate of candidates) {
+    const candidateName = candidate.split(':')[0];
+    console.log(candidateName);
+    const candidateNumber = candidate.split(':')[1];
+    if (candidateName === chosenCandidate) {
+      console.log(candidateNumber);
+      const encryptedVote = await cryptography
+          .encryptVote(electionKey, candidateNumber);
+      await blockchain.saveVote(encryptedVote);
+      return res.status(200)
+          .send('Choice was encrypted and saved on a blockchain');
+    }
+  }
+  res.status(403).send();
 });
 
 
