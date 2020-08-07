@@ -84,6 +84,25 @@ test-node-3:
   except:
     - master
 
+test-node-server:
+  stage: test-nodes
+  tags:
+    - s-vote-node-server
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - 'which ping || ( apt-get update -y && apt-get install iputils-ping -y )'
+  script:
+    - ping -c 2 172.20.83.33
+    - ssh-add <(echo "$PRIVATE_KEY_NODE_SERVER")
+    - ssh -o StrictHostKeyChecking=no root@172.20.83.33 "rm -rf ~/dev/${WORK_DIR}; mkdir -p ~/dev/${WORK_DIR}; cd ~/dev; git init; git clone -b ${BRANCH} ${REPO}; cd ~/dev/${WORK_DIR}/server; npm install; npm run node-test; rm -rf ~/dev"
+  only:
+    - branches
+  except:
+    - master
+
 deploy-node-1:
   stage: deploy-nodes
   tags:
@@ -135,5 +154,23 @@ deploy-node-3:
     - ssh-add <(echo "$PRIVATE_KEY_NODE_3")
     - rm -rf .git
     - ssh -o StrictHostKeyChecking=no root@172.20.83.34 "rm -rf ~/${WORK_DIR}; mkdir -p ~/${WORK_DIR}; git init; git clone -b ${BRANCH} ${REPO}; cd ${WORK_DIR}; cd server; npm install; npm install forever -g; npm run test; npm run stop; npm run start-server"
+  only:
+    - master
+
+deploy-node-server:
+  stage: deploy-nodes
+  tags:
+    - s-vote-node-server
+  before_script:
+    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+    - mkdir -p ~/.ssh
+    - eval $(ssh-agent -s)
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - 'which ping || ( apt-get update -y && apt-get install iputils-ping -y )'
+  script:
+    - ping -c 2 172.20.83.33
+    - ssh-add <(echo "$PRIVATE_KEY_NODE_SERVER")
+    - rm -rf .git
+    - ssh -o StrictHostKeyChecking=no root@172.20.83.33 "rm -rf ~/${WORK_DIR}; mkdir -p ~/${WORK_DIR}; git init; git clone -b ${BRANCH} ${REPO}; cd ${WORK_DIR}; cd server; npm install; npm install forever -g; npm run test; npm run stop; npm run start-server"
   only:
     - master
