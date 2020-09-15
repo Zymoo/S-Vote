@@ -1,8 +1,6 @@
 const Block = require('../models/block');
 
-exports.saveConfig = async function(pubKey, candidates, voters) {
-  const primes = [3, 5, 7, 11, 13, 17, 19, 23, 29, 31];
-
+exports.saveConfig = async function(pubKey, candidates, voters, numbers) {
   const keyTransaction = pubKey;
   let block = new Block({
     tag: 'electionkey',
@@ -12,7 +10,7 @@ exports.saveConfig = async function(pubKey, candidates, voters) {
 
   let primeCnt = 0;
   for (const candidate of candidates) {
-    const candTransaction = candidate.concat(':', primes[primeCnt].toString());
+    const candTransaction = candidate.concat(':', numbers[primeCnt].toString());
     block = new Block({
       tag: 'candidate',
       content: candTransaction,
@@ -38,11 +36,17 @@ exports.saveVoterKey = async function(pubKey) {
   await block.save();
 };
 
-exports.saveResult = async function(result) {
-  const resultTransaction = JSON.stringify(pubKey);
+exports.saveResult = async function(result, resultcipher, score) {
+  const resultTransaction = JSON.stringify(result) + ' : ' + resultcipher;
   const block = new Block({
     tag: 'result',
     content: resultTransaction,
+  });
+  await block.save();
+
+  block = new Block({
+    tag: 'score',
+    content: score,
   });
   await block.save();
 };

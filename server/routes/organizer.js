@@ -28,13 +28,9 @@ router.get('/', function(req, res, next) {
  */
 router.post('/begin', async function(req, res, next) {
   const emails = req.body.emails;
-  console.log('Emails:', emails);
   const shamir = req.body.shamir;
-  console.log('Shamir:', shamir);
   const candidates = req.body.candidates;
-  console.log('Candidates:', candidates);
   const voters = req.body.voters;
-  console.log('Voters:', voters);
 
   const transporter = nodemailer.createTransport({
     host: 'smtp.mailtrap.io',
@@ -56,7 +52,7 @@ router.post('/begin', async function(req, res, next) {
       from: 'government@votenow.com',
       to: emails[index],
       subject: 'Secret Key Part',
-      text: JSON.stringify(share)};
+      text: share};
 
     transporter.sendMail(message, function(err, info) {
       if (err) {
@@ -66,8 +62,8 @@ router.post('/begin', async function(req, res, next) {
       }
     });
   });
-
-  await blockchain.saveConfig(pubKey, candidates, voters);
+  const numbers = [1, 100, 10000, 1000000];
+  await blockchain.saveConfig(pubKey, candidates, voters, numbers);
   res.status(200).send(privKey);
 });
 
@@ -82,10 +78,10 @@ router.post('/end', async function(req, res, next) {
   req.app.locals.shares.add(req.body.share);
   if (req.app.locals.shares.size >= 3) {
     const votes = await blockchain.getTaggedBlockchain('vote');
-    const resultcipher = await cryptography.multiplyVotes(votes);
+    const resultcipher = await cryptography.combineVotes(votes, false);
     const privKey = cryptography.combineKey(Array.from(req.app.locals.shares));
     const result = cryptography.decryptResult(resultcipher, privKey);
-    console.log(result);
+    await blockchain.saveResult(result, resultcipher);
     return res.status(200).send(result.toString());
   }
   res.status(200).send('Got your part!');
