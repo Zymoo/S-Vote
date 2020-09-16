@@ -92,3 +92,16 @@ exports.decryptResult = function(result, privateKey) {
   return decoded;
 };
 
+exports.calculateScore = function(result, numbers) {
+  let sum = result;
+  let score = [];
+  // eslint-disable-next-line guard-for-in
+  for (let number of numbers.reverse()) {
+    let division = Math.floor((+sum) / (+number));
+    if (division > 0) {
+      score.push(division);
+      sum = (+sum) % (+number);
+    }
+  }
+  return score.reverse();
+};

@@ -62,8 +62,8 @@ router.post('/begin', async function(req, res, next) {
       }
     });
   });
-  const numbers = [1, 100, 10000, 1000000];
-  await blockchain.saveConfig(pubKey, candidates, voters, numbers);
+  const candidateNumbers = req.app.locals.numbers;
+  await blockchain.saveConfig(pubKey, candidates, voters, candidateNumbers);
   res.status(200).send(privKey);
 });
 
@@ -81,7 +81,10 @@ router.post('/end', async function(req, res, next) {
     const resultcipher = await cryptography.combineVotes(votes, false);
     const privKey = cryptography.combineKey(Array.from(req.app.locals.shares));
     const result = cryptography.decryptResult(resultcipher, privKey);
-    await blockchain.saveResult(result, resultcipher);
+    // eslint-disable-next-line max-len
+    const score = cryptography.calculateScore(result.toString(), req.app.locals.numbers);
+    console.log(score);
+    await blockchain.saveResult(result.toString(), score);
     return res.status(200).send(result.toString());
   }
   res.status(200).send('Got your part!');
