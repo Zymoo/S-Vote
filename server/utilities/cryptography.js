@@ -69,8 +69,7 @@ exports.combineVotes = async function(votes, multiplication) {
     votecipher.load(context, vote);
     if (multiplication) {
       result = evaluator.multiply(result, votecipher);
-    }
-    else {
+    } else {
       result = evaluator.add(result, votecipher);
     }
   }
