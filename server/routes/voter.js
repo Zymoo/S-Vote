@@ -49,7 +49,6 @@ function authenticateToken(req, res, next) {
  */
 router.post('/keysave', authenticateToken, function(req, res, next) {
   const pubKey = req.body.pubKey;
-  console.log('Public key:', pubKey);
   blockchain.saveVoterKey(pubKey);
   res.send('Passed authentication & saved key on the blockchain');
 });

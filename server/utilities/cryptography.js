@@ -55,19 +55,23 @@ exports.encryptVote = async function(key, vote) {
 
   const encryptor = Morfix.Encryptor(context, publicKey);
   const encoder = Morfix.IntegerEncoder(context);
-  const plaintext = encoder.encodeInt32(parseInt(vote));
+  const plaintext = encoder.encodeUInt32(parseInt(vote));
   const encryptedVote = encryptor.encrypt(plaintext);
   return encryptedVote.save();
 };
 
-exports.multiplyVotes = async function(votes) {
+exports.combineVotes = async function(votes, multiplication) {
   const evaluator = Morfix.Evaluator(context);
   let result = Morfix.CipherText();
   result.load(context, votes[0]);
   for (const vote of votes.slice(1)) {
     const votecipher = Morfix.CipherText();
     votecipher.load(context, vote);
-    result = evaluator.multiply(result, votecipher);
+    if (multiplication) {
+      result = evaluator.multiply(result, votecipher);
+    } else {
+      result = evaluator.add(result, votecipher);
+    }
   }
   return result;
 };
@@ -84,6 +88,20 @@ exports.decryptResult = function(result, privateKey) {
   const decryptor = Morfix.Decryptor(context, secretKey);
   const decryptedResult = decryptor.decrypt(result);
   const decoder = Morfix.IntegerEncoder(context);
-  const decoded = decoder.decodeInt32(decryptedResult);
+  const decoded = decoder.decodeUInt32(decryptedResult);
   return decoded;
+};
+
+exports.calculateScore = function(result, numbers) {
+  let sum = result;
+  let score = [];
+  // eslint-disable-next-line guard-for-in
+  for (let number of numbers.reverse()) {
+    let division = Math.floor((+sum) / (+number));
+    if (division > 0) {
+      score.push(division);
+      sum = (+sum) % (+number);
+    }
+  }
+  return score.reverse();
 };
