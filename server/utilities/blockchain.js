@@ -3,10 +3,34 @@ const solc = require('solc');
 const fs = require('fs');
 const path = require('path');
 const net = require('net');
+//linux
+//const web3 = new Web3(new Web3.providers.IpcProvider('/users/myuser/.ethereum/geth.ipc', net));
+//windows (local testing)
+const web3 = new Web3(new Web3.providers.IpcProvider('\\\\.\\pipe\\geth.ipc', net));
 
-exports.deploy = async function() {
-    var web3 = new Web3(new Web3.providers.IpcProvider('\\\\.\\pipe\\geth.ipc', net));
-    
+exports.getTestAccount = async function() {
+  var account = await web3.eth.getAccounts();
+  
+  return account[0];
+}
+
+exports.getTransactionCount = async function(account) {
+  
+  return await web3.eth.getTransactionCount(account);
+}
+
+exports.testTransaction = async function(sender) {
+  web3.eth.sendTransaction(
+    {from: sender,
+    to: '0x42F330204c09546E066BE1478006B034155f2f91',
+    value: '1' 
+        }, function(err, transactionHash) {
+  if (!err)
+    console.log(transactionHash + ' success');
+  });
+}
+
+exports.deploy = async function() {    
     var contractPath = path.join(__dirname, '../blockchain/contracts/test.sol');
     var contractFile = fs.readFileSync(contractPath).toString();
 

@@ -43,7 +43,12 @@ router.post('/begin', function(req, res, next) {
  */
 router.post('/end', function(req, res, next) {
   
-  blockchain.deploy();
+  blockchain.getTestAccount().then(account => {
+    blockchain.getTransactionCount(account).then(a => console.log('Transaction count: ' + a));
+    blockchain.testTransaction(account);
+  });
+
+  //blockchain.deploy();
   res.send('FAIL');
 });
 
