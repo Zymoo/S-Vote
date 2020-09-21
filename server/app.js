@@ -21,7 +21,8 @@ app.locals.maxvote = 99;
 
 
 const mongoDB = 'mongodb+srv://server:4HyymKiNqmP3yDR@cluster0.orhvk.mongodb.net/SvoteBase?retryWrites=true&w=majority';
-mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
+//for testing purposes
+//mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
 app.locals.db = mongoose.connection;
 app.locals.db.on('error', console.error.bind(console, 'MongoDBerror:'));
 

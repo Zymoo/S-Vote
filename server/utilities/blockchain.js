@@ -9,7 +9,7 @@ const net = require('net');
 const web3 = new Web3(new Web3.providers.IpcProvider('\\\\.\\pipe\\geth.ipc', net));
 
 exports.getTestAccount = async function() {
-  var account = await web3.eth.getAccounts();
+  let account = await web3.eth.getAccounts();
   
   return account[0];
 }
@@ -22,7 +22,7 @@ exports.getTransactionCount = async function(account) {
 exports.testTransaction = async function(sender) {
   web3.eth.sendTransaction(
     {from: sender,
-    to: '0x42F330204c09546E066BE1478006B034155f2f91',
+    to: '0x4076918DFc8F87F097a045b3EDB96Ad380992F7E',
     value: '1' 
         }, function(err, transactionHash) {
   if (!err)
@@ -31,17 +31,37 @@ exports.testTransaction = async function(sender) {
 }
 
 exports.deploy = async function() {    
-    var contractPath = path.join(__dirname, '../blockchain/contracts/test.sol');
-    var contractFile = fs.readFileSync(contractPath).toString();
-
+    let contractPath = path.join(__dirname, '../blockchain/contracts/test.sol');
+    let contractFile = fs.readFileSync(contractPath, 'utf-8');
+    let JSONcontract = JSON.stringify({
+      language: 'Solidity',
+      sources: {
+          contractPath: {
+              content: contractFile
+          },
+      },
+      settings: {
+          outputSelection: {
+              '*': {
+                  '*': [ '*' ]
+              }
+          }
+      }
+    });
+    let output = JSON.parse(solc.compile(JSONcontract));
+    console.log(JSONcontract);
     /*
-    var compiledContract = solc.compile(contractFile)
-    var abi = compiledContract.contracts[':Test'].interface;
-    var bytecode = compiledContract.contracts[':Test'].bytecode;
+    let compiledContract = solc.compile(contractFile);
+    let abi = compiledContract.contracts[':Test'].interface;
+    let bytecode = compiledContract.contracts[':Test'].bytecode;
     
-    var contract = new web3.eth.Contract(JSON.parse(abi));
-    var accounts = await web3.eth.getAccounts();
-    var transaction = contract.deploy({
+    console.log(abi);
+    console.log(bytecode);
+    */
+    /*
+    let contract = new web3.eth.Contract(JSON.parse(abi));
+    let accounts = await web3.eth.getAccounts();
+    let transaction = contract.deploy({
         data: bytecode
         //,arguments:[web3.utils.asciiToHex('string')]
     });
