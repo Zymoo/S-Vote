@@ -1,13 +1,17 @@
 /* eslint-disable max-len */
 const Web3 = require('web3');
 const solc = require('solc');
-const fs = require('fs');
+const fs = require('fs-extra');
 const path = require('path');
 const net = require('net');
+const SCcompiler = require('..\\blockchain\\smart-contracts-compiler');
+
 // linux
 // const web3 = new Web3(new Web3.providers.IpcProvider('/users/myuser/.ethereum/geth.ipc', net));
 // windows (local testing)
-const web3 = new Web3(new Web3.providers.IpcProvider('\\\\.\\pipe\\geth.ipc', net));
+const web3 = new Web3(
+    new Web3.providers.IpcProvider('\\\\.\\pipe\\geth.ipc', net),
+);
 
 exports.getTestAccount = async function() {
   const account = await web3.eth.getAccounts();
@@ -21,36 +25,23 @@ exports.getTransactionCount = async function(account) {
 
 exports.testTransaction = async function(sender) {
   web3.eth.sendTransaction(
-      {from: sender,
+      {
+        from: sender,
         to: '0x4076918DFc8F87F097a045b3EDB96Ad380992F7E',
         value: '1',
-      }, function(err, transactionHash) {
+      },
+      function(err, transactionHash) {
         if (!err) {
           console.log(transactionHash + ' success');
         }
-      });
+      },
+  );
 };
 
+
 exports.deploy = async function() {
-  const contractPath = path.join(__dirname, '../blockchain/contracts/test.sol');
-  const contractFile = fs.readFileSync(contractPath, 'utf-8');
-  const JSONcontract = JSON.stringify({
-    language: 'Solidity',
-    sources: {
-      contractPath: {
-        content: contractFile,
-      },
-    },
-    settings: {
-      outputSelection: {
-        '*': {
-          '*': ['*'],
-        },
-      },
-    },
-  });
-  const output = JSON.parse(solc.compile(JSONcontract));
-  console.log(output);
+  SCcompiler.compile();
+
   /*
     let compiledContract = solc.compile(contractFile);
     let abi = compiledContract.contracts[':Test'].interface;
@@ -75,7 +66,6 @@ exports.deploy = async function() {
   // web3.eth.estimateGas(transaction).then(console.log);
   // console.log(abi);
 };
-
 
 // ipc provider and account address hardcoded
 // on linux the path is: "/users/myuser/.ethereum/geth.ipc"

@@ -1,13 +1,18 @@
-pragma solidity >=0.6.12;
+// SPDX-License-Identifier: GPL-3.0
+pragma solidity >=0.4.16 <0.8.0;
 
 contract Test {
-    string name;
+    uint number;
 
-    function getName() public view returns (string memory) {
-        return name;
+    function set(uint x) public {
+        number = x;
     }
 
-    function setName(string memory s) public {
-        name = s;
+    function get() public view returns (uint) {
+        return number;
+    }
+
+    function increment() public {
+        number = number + 1;
     }
 }
