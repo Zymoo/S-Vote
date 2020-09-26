@@ -82,8 +82,8 @@ router.post('/end', async function(req, res, next) {
     const resultcipher = await cryptography.combineVotes(votes, false);
     const privKey = cryptography.combineKey(Array.from(req.app.locals.shares));
     const result = cryptography.decryptResult(resultcipher, privKey);
-    // eslint-disable-next-line max-len
-    const score = cryptography.calculateScore(result.toString(), req.app.locals.numbers);
+    const score = cryptography.calculateScore(result.toString(),
+        req.app.locals.numbers);
     console.log(score);
     await blockchain.saveResult(result.toString(), score);
     return res.status(200).send(result.toString());

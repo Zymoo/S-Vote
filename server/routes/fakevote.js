@@ -25,7 +25,6 @@ router.get('/', function(req, res, next) {
 router.post('/vote', async function(req, res, next) {
   const chosenCandidate = req.body.candidate;
   const candidates = await blockchain.getTaggedBlockchain('candidate');
-  console.log(candidates);
   const electionKey = await blockchain.getTaggedBlockchain('electionkey');
   for (const candidate of candidates) {
     const candidateName = candidate.split(':')[0];
