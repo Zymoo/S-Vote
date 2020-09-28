@@ -18,6 +18,7 @@ app.locals.token = crypto.randomBytes(64).toString('hex');
 app.locals.shares = new Set();
 app.locals.numbers = [1, 100, 10000, 1000000];
 app.locals.maxvote = 99;
+app.locals.shamir = 0;
 
 
 const mongoDB = 'mongodb+srv://server:4HyymKiNqmP3yDR@cluster0.orhvk.mongodb.net/SvoteBase?retryWrites=true&w=majority';

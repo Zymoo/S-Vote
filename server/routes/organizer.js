@@ -31,6 +31,7 @@ router.post('/begin', async function(req, res, next) {
   const shamir = req.body.shamir;
   const candidates = req.body.candidates;
   const voters = req.body.voters;
+  req.app.locals.shamir = parseInt(shamir);
 
   const transporter = nodemailer.createTransport({
     host: 'smtp.mailtrap.io',
@@ -76,13 +77,13 @@ router.post('/begin', async function(req, res, next) {
  */
 router.post('/end', async function(req, res, next) {
   req.app.locals.shares.add(req.body.share);
-  if (req.app.locals.shares.size >= 3) {
+  if (req.app.locals.shares.size >= req.app.locals.shamir) {
     const votes = await blockchain.getTaggedBlockchain('vote');
     const resultcipher = await cryptography.combineVotes(votes, false);
     const privKey = cryptography.combineKey(Array.from(req.app.locals.shares));
     const result = cryptography.decryptResult(resultcipher, privKey);
-    // eslint-disable-next-line max-len
-    const score = cryptography.calculateScore(result.toString(), req.app.locals.numbers);
+    const score = cryptography.calculateScore(result.toString(),
+        req.app.locals.numbers);
     console.log(score);
     await blockchain.saveResult(result.toString(), score);
     return res.status(200).send(result.toString());
