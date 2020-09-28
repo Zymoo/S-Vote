@@ -6,20 +6,25 @@ const Natural = require('bn.js');
 /**
  * Proof of concept of Paillier cryptosystem.
  * However due to an awefuly slow JS BigInt ops,
- * there is no point in developing it any further.
+ * tried using bn.js library. Results are much better,
+ * yet it is still pretty slow.
  */
 class Paillier {
   constructor(bits) {
     this.bits = bits;
   }
 
+  lFunction(x, n) {
+    return (x.subn(1)).divRound(n);
+  }
+
   getPrime() {
     let result;
     forge.prime.generateProbablePrime(this.bits,
         (err, num) => {
-          result = num.toString(16);
+          result = num.toString(10);
         });
-    result = new Natural(result, 16);
+    result = new Natural(result, 10);
     return result;
   }
 
@@ -58,13 +63,30 @@ class Paillier {
     const size = this.getRandomInteger(1, n.byteLength() - 1);
     const rBytes = crypto.randomBytes(size).toString('hex');
     const r = new Natural(rBytes, 16);
-
     const red = Natural.red(n.mul(n));
-
     const rRed = r.toRed(red);
     const gRed = g.toRed(red);
     const result = gRed.redPow(m).redMul(rRed.redPow(n));
     return result.toString(10);
+  }
+
+
+  decryptMessage(ciphertext, privateKey, publicKey) {
+    const [lambda, mu] = privateKey;
+    const n = publicKey[0];
+    const c = new Natural(ciphertext);
+    const red = Natural.red(n.mul(n));
+    const cRed = c.toRed(red);
+    const inner = cRed.redPow(lambda).fromRed();
+    const m = (this.lFunction(inner, n)).mul(mu).mod(n);
+    return m.toString(10);
+  }
+
+  combineCiphers(cipherA, cipherB, publicKey) {
+    const a = new Natural(cipherA);
+    const b = new Natural(cipherB);
+    const n = publicKey[0];
+    return a.mul(b).mod(n.mul(n));
   }
 };
 
