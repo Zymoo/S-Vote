@@ -19,21 +19,20 @@ class Paillier {
   }
 
   getPrime() {
-    let result;
-    forge.prime.generateProbablePrime(this.bits,
-        (err, num) => {
-          result = num.toString(10);
-        });
-    result = new Natural(result, 10);
-    return result;
+    return new Promise((resolve, reject) => {
+      forge.prime.generateProbablePrime(this.bits, (err, res) => {
+        if (err) reject(err.message);
+        if (res) resolve(new Natural(res.toString()));
+      });
+    });
   }
 
-  generateFactors() {
+  async generateFactors() {
     let p;
     let q;
     while (true) {
-      p = this.getPrime(this.bits);
-      q = this.getPrime(this.bits);
+      p = await this.getPrime(this.bits);
+      q = await this.getPrime(this.bits);
       if (!p.eq(q)) {
         break;
       }
@@ -41,8 +40,8 @@ class Paillier {
     return [p, q];
   }
 
-  generateKeys() {
-    const [p, q] = this.generateFactors(this.bits);
+  async generateKeys() {
+    const [p, q] = await this.generateFactors(this.bits);
     const n = p.mul(q);
     const lambda = (p.subn(1)).mul(q.subn(1));
     const g = n.addn(1);

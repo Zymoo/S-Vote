@@ -6,7 +6,7 @@
     "start": "node ./bin/www",
     "stop": "forever stopall",
     "start-server": "forever start ./bin/www",
-    "test": "mocha",
+    "test": "mocha --timeout 100000",
     "node-test": "node -v"
   },
   "dependencies": {
