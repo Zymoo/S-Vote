@@ -1,0 +1,6 @@
+FROM ethereum/client-go:stable
+COPY genesis-poa.json /node1/genesis-poa.json
+RUN geth --ipcdisable --datadir /node1 init /node1/genesis-poa.json
+COPY static-nodes.json /node1/geth/static-nodes.json
+COPY keystore/node1-privatekey /node1/keystore/node1-privatekey
+RUN touch /node1/password.txt
