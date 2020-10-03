@@ -11,7 +11,7 @@ const Natural = require('bn.js');
  */
 class Paillier {
   constructor(bits) {
-    this.bits = bits;
+    this.bits = bits/2;
   }
 
   lFunction(x, n) {
@@ -41,7 +41,7 @@ class Paillier {
   }
 
   async generateKeys() {
-    const [p, q] = await this.generateFactors(this.bits);
+    const [p, q] = await this.generateFactors();
     const n = p.mul(q);
     const lambda = (p.subn(1)).mul(q.subn(1));
     const g = n.addn(1);
@@ -55,13 +55,8 @@ class Paillier {
     return Math.floor(Math.random() * (max - min) ) + min;
   }
 
-  encryptMessage(message, publicKey) {
-    const [n, g] = publicKey;
+  encryptInner(n, r, g, message) {
     const m = new Natural(message);
-    if (m.gt(n)) return 0;
-    const size = this.getRandomInteger(1, n.byteLength() - 1);
-    const rBytes = crypto.randomBytes(size).toString('hex');
-    const r = new Natural(rBytes, 16);
     const red = Natural.red(n.mul(n));
     const rRed = r.toRed(red);
     const gRed = g.toRed(red);
@@ -69,6 +64,25 @@ class Paillier {
     return result.toString(10);
   }
 
+  encryptMessage(message, publicKey) {
+    const [n, g] = publicKey;
+    const m = new Natural(message);
+    if (m.gt(n)) return 0;
+    const size = this.getRandomInteger(1, n.byteLength() - 1);
+    const rBytes = crypto.randomBytes(size).toString('hex');
+    const r = new Natural(rBytes, 16);
+    const result = this.encryptInner(n, r, g, m);
+    return result;
+  }
+
+  proveCorrectness(ciphertext, lambda, n) {
+    const c = new Natural(ciphertext);
+    const r = c.mod(n);
+    const exponent = n.invm(lambda);
+    const red = Natural.red(n);
+    const nonce = r.toRed(red).redPow(exponent);
+    return nonce.fromRed();
+  }
 
   decryptMessage(ciphertext, privateKey, publicKey) {
     const [lambda, mu] = privateKey;
