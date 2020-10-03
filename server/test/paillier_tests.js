@@ -44,4 +44,16 @@ describe('Paillier with 2048b', function() {
       expect(result).to.eq('12');
     });
   });
+
+  describe('proveCorrectness', function() {
+    it('should return correct nonce for given ciphertext', async function() {
+      const p = new Paillier(bits);
+      const message = '5';
+      const [pubKey, secKey] = await p.generateKeys();
+      const cipher = p.encryptMessage(message, pubKey);
+      const nonce = p.proveCorrectness(cipher, secKey[0], pubKey[0]);
+      const cipherPublic = p.encryptInner(pubKey[0], nonce, pubKey[1], message);
+      expect(cipher).to.eq(cipherPublic);
+    });
+  });
 });
