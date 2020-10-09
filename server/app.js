@@ -18,6 +18,7 @@ app.locals.token = crypto.randomBytes(64).toString('hex');
 app.locals.shares = new Set();
 app.locals.numbers = [1, 100, 10000, 1000000];
 app.locals.maxvote = 99;
+app.locals.shamir = 0;
 
 
 // eslint-disable-next-line no-unused-vars

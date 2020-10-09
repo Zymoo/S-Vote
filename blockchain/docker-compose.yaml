@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile-server
+    ports:
+      - "8880:8880"
+    networks:
+      svote_ethereum:
+        ipv4_address: 172.16.238.10
+    command: --http --http.port 8880 --http.addr "0.0.0.0" --ipcdisable --datadir /blockchain --http.api "admin,personal,eth,net,web3" --networkid 1337 --allow-insecure-unlock --port 30300 --nodiscover --password /blockchain/password.txt --unlock 0xa5EFDe8c0F99b444dFC9c415A98ab93D5Dc2ac9F --nat extip:172.16.238.10 --nousb --miner.gasprice 0 --syncmode full
+  node1:
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile-node1
+    ports:
+      - "8881:8881"
+    networks:
+      svote_ethereum:
+        ipv4_address: 172.16.238.11
+    command: --http --http.port 8881 --http.addr "0.0.0.0" --ipcdisable --datadir /node1 --http.api "admin,personal,eth,net,web3,miner" --networkid 1337 --allow-insecure-unlock --port 30301 --nodiscover --password /node1/password.txt --unlock 0x6e94d071E5274Bdfec7c6c7aEbBb8c7c230ab271 --nat extip:172.16.238.11 --nousb --miner.gasprice 0 --miner.etherbase 0x6e94d071E5274Bdfec7c6c7aEbBb8c7c230ab271 --syncmode full --mine 
+  node2:
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile-node2
+    ports:
+      - "8882:8882"
+    networks:
+      svote_ethereum:
+        ipv4_address: 172.16.238.12
+    command: --http --http.port 8882 --http.addr "0.0.0.0" --ipcdisable --datadir /node2 --http.api "admin,personal,eth,net,web3,miner" --networkid 1337 --allow-insecure-unlock --port 30302 --nodiscover --password /node2/password.txt --unlock 0xD2640f08100b1aF79b86995B04c6bcF98EbB4d3c --nat extip:172.16.238.12 --nousb --miner.gasprice 0 --miner.etherbase 0xD2640f08100b1aF79b86995B04c6bcF98EbB4d3c --syncmode full --mine
+  node3:
+    build:
+      context: .
+      dockerfile: dockerfile/Dockerfile-node3
+    ports:
+      - "8883:8883"
+    networks:
+      svote_ethereum:
+        ipv4_address: 172.16.238.13
+    command: --http --http.port 8883 --http.addr "0.0.0.0" --ipcdisable --datadir /node3 --http.api "admin,personal,eth,net,web3,miner" --networkid 1337 --allow-insecure-unlock --port 30303 --nodiscover --password /node3/password.txt --unlock 0x3B7E744E81751025B6A772211d32F57670dD0F47 --nat extip:172.16.238.13 --nousb --miner.gasprice 0 --miner.etherbase 0x3B7E744E81751025B6A772211d32F57670dD0F47 --syncmode full --mine
+
+networks:
+  svote_ethereum:
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.16.238.0/24"

@@ -1,2 +1,45 @@
 # s-vote
 
+## Run blockchain locally (development)
+
+Local blockchain follows the architecture of production environemnt. It consists of 4 containers, one server and three miner nodes. This network uses Proof of Authority. New blocks are published every 5s — if there are pending transactions.
+
+To run ethereum network locally (one server node + 3 miner nodes) follow below steps:
+0. `cd` into this project root directory
+1. `cd blockchain`
+2. `docker-compose up` — this will start 4 containers, all running `geth`, and show their logs. To pause just use `Ctr+C` and resume containers using `docker-compose up` again — internal state of the containers (blockchain) will be preserved
+3. `docker-compose down` — this will shutdown and remove the containers deleting their internal state (blockchain)
+
+All 4 nodes can be interacted with using `geth` on your host machine (you need to install it yourself — https://geth.ethereum.org/docs/install-and-build/installing-geth)
+
+To attach to a node use `geth attach http://127.0.0.1:PORT` — each node has it's own port.
+
+### Nodes info
++-----------+-------+----------------+--------------------------------+
+| NODE NAME |  PORT |  CONTAINER IP  |       ADDRESS/PUBLIC KEY       |
++-----------+-------+----------------+--------------------------------+
+|           |       |                |                                |
+| server    |  8880 |  172.16.238.10 |  0xa5EFDe8c0F99b444dFC9c415A98 |
+|           |       |                | ab93D5Dc2ac9F                  |
+|           |       |                |                                |
+| node1     |  8881 |  172.16.238.11 |  0x6e94d071E5274Bdfec7c6c7aEbB |
+|           |       |                | b8c7c230ab271                  |
+|           |       |                |                                |
+| node2     |  8882 |  172.16.238.12 |  0xD2640f08100b1aF79b86995B04c |
+|           |       |                | 6bcF98EbB4d3c                  |
+|           |       |                |                                |
+| node3     |  8883 |  172.16.238.13 |  0x3B7E744E81751025B6A772211d3 |
+|           |       |                | 2F57670dD0F47                  |
++-----------+-------+----------------+--------------------------------+
+
+### Useful geth commands
+
+After attaching to the node console use below commands. More commands at https://geth.ethereum.org/docs/rpc/ns-admin (see table on the left with different namespaces).
+
+* `admin.peers` — show peers (other nodes) this node is connected to
+
+* `admin.nodeInfo` — show node information
+
+* `eth.getBalance(address)` — show ETH balance of given account, eg. get ETH balance of *node2* `eth.getBalance("0xD2640f08100b1aF79b86995B04c6bcF98EbB4d3c")`
+
+* `eth.sendTransaction({from: address, to: address, value: amount})` — send transaction from unlocked address (adress of the attached node) to other account, eg. sending 1000 ETH from *server* to *node2*: `eth.sendTransaction({from: "0xa5EFDe8c0F99b444dFC9c415A98ab93D5Dc2ac9F",to: "0xD2640f08100b1aF79b86995B04c6bcF98EbB4d3c", value: "1000"})`

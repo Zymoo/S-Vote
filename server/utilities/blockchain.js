@@ -1,8 +1,5 @@
 /* eslint-disable max-len */
 const Web3 = require('web3');
-const solc = require('solc');
-const fs = require('fs-extra');
-const path = require('path');
 const net = require('net');
 const SCcompiler = require('..\\blockchain\\smart-contracts-compiler');
 
