@@ -6,13 +6,14 @@
 const solc = require('solc');
 const fs = require('fs-extra');
 const path = require('path');
-const util = require('util');
+// const util = require('util');
 
 exports.compile = function() {
   const buildPath = cleanup();
   const config = createConfiguration();
   const compiled = compileSources(config);
   writeOutput(compiled, buildPath);
+  // write json file to console
   // console.log(util.inspect(compiled, false, null, true /* enable colors */));
 };
 

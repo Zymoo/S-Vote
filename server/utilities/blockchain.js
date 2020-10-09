@@ -1,14 +1,10 @@
 /* eslint-disable max-len */
-const Web3 = require('web3');
-const net = require('net');
 const SCcompiler = require('..\\blockchain\\smart-contracts-compiler');
-
-// linux
-// const web3 = new Web3(new Web3.providers.IpcProvider('/users/myuser/.ethereum/geth.ipc', net));
-// windows (local testing)
+const Web3 = require('web3');
 const web3 = new Web3(
-    new Web3.providers.IpcProvider('\\\\.\\pipe\\geth.ipc', net),
+    new Web3(new Web3.providers.HttpProvider('http://localhost:8880')),
 );
+const serverAddress = '0xa5EFDe8c0F99b444dFC9c415A98ab93D5Dc2ac9F';
 
 exports.getTestAccount = async function() {
   const account = await web3.eth.getAccounts();
@@ -24,13 +20,13 @@ exports.testTransaction = async function(sender) {
   web3.eth.sendTransaction(
       {
         from: sender,
-        to: '0x4076918DFc8F87F097a045b3EDB96Ad380992F7E',
+        to: serverAddress,
         value: '1',
       },
       function(err, transactionHash) {
         if (!err) {
           console.log(transactionHash + ' success');
-        }
+        } else console.log(err);
       },
   );
 };
