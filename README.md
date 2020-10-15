@@ -10,7 +10,11 @@ To run ethereum network locally (one server node + 3 miner nodes) follow below s
 2. `docker-compose up` — this will start 6 containers, four running `geth`, 2 running `mongoDB` and its web interface, and show their logs. To pause just use `Ctr+C` and resume containers using `docker-compose up` again — internal state of the containers (blockchain) will be preserved
 3. `docker-compose down` — this will shutdown and remove the containers deleting their internal state (blockchain)
 
-### Interact with MongoDB
+### Interact with MongoDB (npm run start:dev)
+**[Important]**  
+Two connect to container-based MongoDB instance run `npm run start:dev`.  
+**[Important]**
+
 Two MongoDB containers are running — one with database, and one with web interface.
 
 Database can be explored at `http://localhost:8081/db/admin/`. Database is exposed on port `27017` (eg. for connecting via mongoDB client).
