@@ -7,7 +7,7 @@
 const express = require('express');
 const router = express.Router();
 const cryptography = require('../utilities/cryptography');
-const blockchain = require('../utilities/blockchain');
+const database = require('../utilities/database');
 const nodemailer = require('nodemailer');
 
 /* Debug purpose - sanity check */
@@ -64,7 +64,7 @@ router.post('/begin', async function(req, res, next) {
     });
   });
   const candidateNumbers = req.app.locals.numbers;
-  await blockchain.saveConfig(pubKey, candidates, voters, candidateNumbers);
+  await database.saveConfig(pubKey, candidates, voters, candidateNumbers);
   res.status(200).send(privKey);
 });
 
@@ -78,14 +78,14 @@ router.post('/begin', async function(req, res, next) {
 router.post('/end', async function(req, res, next) {
   req.app.locals.shares.add(req.body.share);
   if (req.app.locals.shares.size >= req.app.locals.shamir) {
-    const votes = await blockchain.getTaggedBlockchain('vote');
+    const votes = await database.getTaggedBlockchain('vote');
     const resultcipher = await cryptography.combineVotes(votes, false);
     const privKey = cryptography.combineKey(Array.from(req.app.locals.shares));
     const result = cryptography.decryptResult(resultcipher, privKey);
     const score = cryptography.calculateScore(result.toString(),
         req.app.locals.numbers);
     console.log(score);
-    await blockchain.saveResult(result.toString(), score);
+    await database.saveResult(result.toString(), score);
     return res.status(200).send(result.toString());
   }
   res.status(200).send('Got your part!');

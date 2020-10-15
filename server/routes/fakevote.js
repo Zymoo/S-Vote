@@ -8,7 +8,7 @@
 
 const express = require('express');
 const router = express.Router();
-const blockchain = require('../utilities/blockchain');
+const database = require('../utilities/database');
 const cryptography = require('../utilities/cryptography');
 
 /* Debug purpose - sanity check */
@@ -24,8 +24,8 @@ router.get('/', function(req, res, next) {
  */
 router.post('/vote', async function(req, res, next) {
   const chosenCandidate = req.body.candidate;
-  const candidates = await blockchain.getTaggedBlockchain('candidate');
-  const electionKey = await blockchain.getTaggedBlockchain('electionkey');
+  const candidates = await database.getTaggedBlockchain('candidate');
+  const electionKey = await database.getTaggedBlockchain('electionkey');
   for (const candidate of candidates) {
     const candidateName = candidate.split(':')[0];
     console.log(candidateName);
@@ -34,7 +34,7 @@ router.post('/vote', async function(req, res, next) {
       console.log(candidateNumber);
       const encryptedVote = await cryptography
           .encryptVote(electionKey, candidateNumber);
-      await blockchain.saveVote(encryptedVote);
+      await database.saveVote(encryptedVote);
       return res.status(200)
           .send('Choice was encrypted and saved on a blockchain');
     }
