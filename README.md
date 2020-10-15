@@ -1,16 +1,22 @@
 # s-vote
 
-## Run blockchain locally (development)
+## Run blockchain locally (with MongoDB fallback)
 
 Local blockchain follows the architecture of production environemnt. It consists of 4 containers, one server and three miner nodes. This network uses Proof of Authority. New blocks are published every 5s — if there are pending transactions.
 
 To run ethereum network locally (one server node + 3 miner nodes) follow below steps:
 0. `cd` into this project root directory
 1. `cd blockchain`
-2. `docker-compose up` — this will start 4 containers, all running `geth`, and show their logs. To pause just use `Ctr+C` and resume containers using `docker-compose up` again — internal state of the containers (blockchain) will be preserved
+2. `docker-compose up` — this will start 6 containers, four running `geth`, 2 running `mongoDB` and its web interface, and show their logs. To pause just use `Ctr+C` and resume containers using `docker-compose up` again — internal state of the containers (blockchain) will be preserved
 3. `docker-compose down` — this will shutdown and remove the containers deleting their internal state (blockchain)
 
-All 4 nodes can be interacted with using `geth` on your host machine (you need to install it yourself — https://geth.ethereum.org/docs/install-and-build/installing-geth)
+### Interact with MongoDB
+Two MongoDB containers are running — one with database, and one with web interface.
+
+Database can be explored at `http://localhost:8081/db/admin/`. Database is exposed on port `27017` (eg. for connecting via mongoDB client).
+
+### Interact with blockchain
+All blockchain nodes can be interacted with using `geth` on your host machine (you need to install it yourself — https://geth.ethereum.org/docs/install-and-build/installing-geth)
 
 To attach to a node use `geth attach http://127.0.0.1:PORT` — each node has it's own port.
 

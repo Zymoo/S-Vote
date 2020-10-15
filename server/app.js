@@ -21,14 +21,14 @@ app.locals.maxvote = 99;
 app.locals.shamir = 0;
 
 
-const mongoDB = 'mongodb+srv://server:4HyymKiNqmP3yDR@cluster0.orhvk.mongodb.net/SvoteBase?retryWrites=true&w=majority';
-mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
+const mongoDB = 'mongodb://root:example@localhost:27017/admin';
+var db = mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
 app.locals.db = mongoose.connection;
 app.locals.db.on('error', console.error.bind(console, 'MongoDBerror:'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'pug');
 
 app.use(logger('dev'));
 app.use(express.json({limit: '50mb'}));

@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-const {Seal} = require('node-seal');
+const Seal = require('node-seal')
 const secrets = require('secrets.js-grempe');
 
 (async () => {

@@ -41,6 +41,23 @@ services:
       svote_ethereum:
         ipv4_address: 172.16.238.13
     command: --http --http.port 8883 --http.addr "0.0.0.0" --ipcdisable --datadir /node3 --http.api "admin,personal,eth,net,web3,miner" --networkid 1337 --allow-insecure-unlock --port 30303 --nodiscover --password /node3/password.txt --unlock 0x3B7E744E81751025B6A772211d32F57670dD0F47 --nat extip:172.16.238.13 --nousb --miner.gasprice 0 --miner.etherbase 0x3B7E744E81751025B6A772211d32F57670dD0F47 --syncmode full --mine
+  mongodb:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: 'root'
+      MONGO_INITDB_ROOT_PASSWORD: 'example'
+    ports:
+      - "27017:27017"
+  mongo-express:
+    image: mongo-express:latest
+    depends_on:
+      - mongodb
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: 'root'
+      ME_CONFIG_MONGODB_ADMINPASSWORD: 'example'
+      ME_CONFIG_MONGODB_SERVER: 'mongodb'
 
 networks:
   svote_ethereum:
