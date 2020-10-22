@@ -37,9 +37,21 @@ function createConfiguration() {
   return {
     language: 'Solidity',
     sources: {
-      'Test.sol': {
+      'Candidate.sol': {
         content: fs.readFileSync(
-            path.resolve(__dirname, 'contracts', 'Test.sol'), 'utf8'),
+            path.resolve(__dirname, 'contracts', 'Candidate.sol'), 'utf8'),
+      },
+      'Vote.sol': {
+        content: fs.readFileSync(
+            path.resolve(__dirname, 'contracts', 'Vote.sol'), 'utf8'),
+      },
+      'Voter.sol': {
+        content: fs.readFileSync(
+            path.resolve(__dirname, 'contracts', 'Voter.sol'), 'utf8'),
+      },
+      'Election.sol': {
+        content: fs.readFileSync(
+            path.resolve(__dirname, 'contracts', 'Election.sol'), 'utf8'),
       },
       // add more contracts here
     },
