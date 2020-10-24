@@ -5,39 +5,41 @@ const Natural = require('bn.js');
 
 /**
  * Proof of concept of Paillier cryptosystem.
- * However due to an awefuly slow JS BigInt ops,
- * tried using bn.js library. Results are much better,
- * yet it is still pretty slow.
+ * After switching to bn.js library results are satisfactory.
  */
 class Paillier {
   constructor(bits) {
     this.bits = bits/2;
-  }
+    this.separator = '123456789123456789123456789';
+    this.lFunction = function(x, n) {
+      return (x.subn(1)).divRound(n);
+    };
 
-  lFunction(x, n) {
-    return (x.subn(1)).divRound(n);
-  }
-
-  getPrime() {
-    return new Promise((resolve, reject) => {
-      forge.prime.generateProbablePrime(this.bits, (err, res) => {
-        if (err) reject(err.message);
-        if (res) resolve(new Natural(res.toString()));
+    this.getPrime = function() {
+      return new Promise((resolve, reject) => {
+        forge.prime.generateProbablePrime(this.bits, (err, res) => {
+          if (err) reject(err.message);
+          if (res) resolve(new Natural(res.toString()));
+        });
       });
-    });
-  }
+    };
 
-  async generateFactors() {
-    let p;
-    let q;
-    while (true) {
-      p = await this.getPrime(this.bits);
-      q = await this.getPrime(this.bits);
-      if (!p.eq(q)) {
-        break;
+    this.generateFactors = async function() {
+      let p;
+      let q;
+      while (true) {
+        p = await this.getPrime(this.bits);
+        q = await this.getPrime(this.bits);
+        if (!p.eq(q)) {
+          break;
+        }
       }
-    }
-    return [p, q];
+      return [p, q];
+    };
+
+    this.getRandomInteger = function(min, max) {
+      return Math.floor(Math.random() * (max - min) ) + min;
+    };
   }
 
   async generateKeys() {
@@ -48,11 +50,7 @@ class Paillier {
     const mu = lambda.invm(n);
     const publicKey = [n, g];
     const privateKey = [lambda, mu];
-    return [publicKey, privateKey];
-  }
-
-  getRandomInteger(min, max) {
-    return Math.floor(Math.random() * (max - min) ) + min;
+    return [this.stringifyKey(privateKey), this.stringifyKey(publicKey)];
   }
 
   encryptInner(n, r, g, message) {
@@ -65,7 +63,7 @@ class Paillier {
   }
 
   encryptMessage(message, publicKey) {
-    const [n, g] = publicKey;
+    const [n, g] = this.objectifyKey(publicKey);
     const m = new Natural(message);
     if (m.gt(n)) return 0;
     const size = this.getRandomInteger(1, n.byteLength() - 1);
@@ -85,8 +83,8 @@ class Paillier {
   }
 
   decryptMessage(ciphertext, privateKey, publicKey) {
-    const [lambda, mu] = privateKey;
-    const n = publicKey[0];
+    const [lambda, mu] = this.objectifyKey(privateKey);
+    const n = this.objectifyKey(publicKey)[0];
     const c = new Natural(ciphertext);
     const red = Natural.red(n.mul(n));
     const cRed = c.toRed(red);
@@ -98,8 +96,21 @@ class Paillier {
   combineCiphers(cipherA, cipherB, publicKey) {
     const a = new Natural(cipherA);
     const b = new Natural(cipherB);
-    const n = publicKey[0];
+    const n = this.objectifyKey(publicKey)[0];
     return a.mul(b).mod(n.mul(n));
+  }
+
+  stringifyKey(key) {
+    const [x, y] = key;
+    const line = x.toString() + this.separator + y.toString();
+    return line;
+  }
+
+  objectifyKey(key) {
+    const separatorInx = key.indexOf(this.separator);
+    const x = new Natural(key.slice(0, separatorInx));
+    const y = new Natural(key.slice(separatorInx + this.separator.length));
+    return [x, y];
   }
 };
 

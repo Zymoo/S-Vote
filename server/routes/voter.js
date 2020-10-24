@@ -1,6 +1,6 @@
 /**
  *
- * Entry part of server - defines public interface for voters.
+ * Defines public interface for voters.
  *
  */
 

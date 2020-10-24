@@ -44,10 +44,12 @@ router.post('/begin', async function(req, res, next) {
 
   const keys = await cryptography.createKeys();
   console.log('Keys generated');
-  const privKey = keys[0];
-  const pubKey = keys[1];
+  const privKey = keys.secretKey;
+  const pubKey = keys.publicKey;
+  req.app.locals.publicKey = pubKey;
 
-  const shares = cryptography.partKey(privKey, emails.length, parseInt(shamir));
+  const shares = cryptography.
+      partKey(privKey, emails.length, parseInt(shamir));
   shares.forEach((share, index) => {
     const message = {
       from: 'government@votenow.com',
@@ -77,11 +79,12 @@ router.post('/begin', async function(req, res, next) {
  */
 router.post('/end', async function(req, res, next) {
   req.app.locals.shares.add(req.body.share);
+  const pubKey = req.app.locals.publicKey;
   if (req.app.locals.shares.size >= req.app.locals.shamir) {
     const votes = await database.getTaggedBlockchain('vote');
-    const resultcipher = await cryptography.combineVotes(votes, false);
+    const resultcipher = cryptography.combineVotes(votes, pubKey);
     const privKey = cryptography.combineKey(Array.from(req.app.locals.shares));
-    const result = cryptography.decryptResult(resultcipher, privKey);
+    const result = cryptography.decryptResult(resultcipher, privKey, pubKey);
     const score = cryptography.calculateScore(result.toString(),
         req.app.locals.numbers);
     console.log(score);

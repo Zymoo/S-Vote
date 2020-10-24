@@ -31,9 +31,8 @@ router.post('/vote', async function(req, res, next) {
     console.log(candidateName);
     const candidateNumber = candidate.split(':')[1];
     if (candidateName === chosenCandidate) {
-      console.log(candidateNumber);
-      const encryptedVote = await cryptography
-          .encryptVote(electionKey, candidateNumber);
+      const encryptedVote = cryptography
+          .encryptVote(electionKey[0], candidateNumber);
       await database.saveVote(encryptedVote);
       return res.status(200)
           .send('Choice was encrypted and saved on a blockchain');

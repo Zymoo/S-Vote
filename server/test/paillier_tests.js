@@ -1,9 +1,10 @@
 const chai = require('chai');
 const expect = chai.expect;
+const Natural = require('bn.js');
 const Paillier = require('../utilities/paillier');
 
 describe('Paillier with 2048b', function() {
-  const bits = 2048;
+  const bits = 1024; // 2048
   describe('generateFactors', function() {
     it('should return array with p q values', async function() {
       const p = new Paillier(bits);
@@ -23,8 +24,8 @@ describe('Paillier with 2048b', function() {
   describe('decryptMessage', function() {
     it('should encrypt and return same decrypted message', async function() {
       const p = new Paillier(bits);
-      const message = '5';
-      const [pubKey, secKey] = await p.generateKeys();
+      const message = '100000';
+      const [secKey, pubKey] = await p.generateKeys();
       const cipher = p.encryptMessage(message, pubKey);
       const result = p.decryptMessage(cipher, secKey, pubKey);
       expect(result).to.eq(message);
@@ -36,7 +37,7 @@ describe('Paillier with 2048b', function() {
       const p = new Paillier(bits);
       const messageA = '5';
       const messageB = '7';
-      const [pubKey, secKey] = await p.generateKeys();
+      const [secKey, pubKey] = await p.generateKeys();
       const cipherA = p.encryptMessage(messageA, pubKey);
       const cipherB = p.encryptMessage(messageB, pubKey);
       const comb = p.combineCiphers(cipherA, cipherB, pubKey);
@@ -49,11 +50,24 @@ describe('Paillier with 2048b', function() {
     it('should return correct nonce for given ciphertext', async function() {
       const p = new Paillier(bits);
       const message = '5';
-      const [pubKey, secKey] = await p.generateKeys();
+      const [secKey, pubKey] = await p.generateKeys();
       const cipher = p.encryptMessage(message, pubKey);
-      const nonce = p.proveCorrectness(cipher, secKey[0], pubKey[0]);
-      const cipherPublic = p.encryptInner(pubKey[0], nonce, pubKey[1], message);
+      const secKeyObj = p.objectifyKey(secKey);
+      const pubKeyObj = p.objectifyKey(pubKey);
+      const nonce = p.proveCorrectness(cipher, secKeyObj[0], pubKeyObj[0]);
+      const cipherPublic = p
+          .encryptInner(pubKeyObj[0], nonce, pubKeyObj[1], message);
       expect(cipher).to.eq(cipherPublic);
+    });
+  });
+
+  describe('stringify & objectifyKey', function() {
+    it('should return proper object representation ', async function() {
+      const p = new Paillier(bits);
+      const secKey = [new Natural(1), new Natural(1)];
+      const secKeyStr = p.stringifyKey(secKey);
+      const secKeyDeStr = p.objectifyKey(secKeyStr);
+      expect(secKey).to.deep.eq(secKeyDeStr);
     });
   });
 });
