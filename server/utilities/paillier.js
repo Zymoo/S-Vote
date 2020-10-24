@@ -73,7 +73,9 @@ class Paillier {
     return result;
   }
 
-  proveCorrectness(ciphertext, lambda, n) {
+  proveCorrectness(ciphertext, privateKey, publicKey) {
+    const [lambda] = this.objectifyKey(privateKey);
+    const [n] = this.objectifyKey(publicKey);
     const c = new Natural(ciphertext);
     const r = c.mod(n);
     const exponent = n.invm(lambda);

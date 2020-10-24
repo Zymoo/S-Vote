@@ -52,9 +52,8 @@ describe('Paillier with 2048b', function() {
       const message = '5';
       const [secKey, pubKey] = await p.generateKeys();
       const cipher = p.encryptMessage(message, pubKey);
-      const secKeyObj = p.objectifyKey(secKey);
       const pubKeyObj = p.objectifyKey(pubKey);
-      const nonce = p.proveCorrectness(cipher, secKeyObj[0], pubKeyObj[0]);
+      const nonce = p.proveCorrectness(cipher, secKey, pubKey);
       const cipherPublic = p
           .encryptInner(pubKeyObj[0], nonce, pubKeyObj[1], message);
       expect(cipher).to.eq(cipherPublic);
@@ -62,7 +61,7 @@ describe('Paillier with 2048b', function() {
   });
 
   describe('stringify & objectifyKey', function() {
-    it('should return proper object representation ', async function() {
+    it('should return proper object representation ', function() {
       const p = new Paillier(bits);
       const secKey = [new Natural(1), new Natural(1)];
       const secKeyStr = p.stringifyKey(secKey);

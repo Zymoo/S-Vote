@@ -41,3 +41,8 @@ exports.decryptResult = function(result, privateKey, publicKey) {
   return cryptosystem.decryptResult(result, privateKey, publicKey);
 };
 
+exports.getEphermalKey = function(cipher, privateKey, publicKey) {
+  const nonce = cryptosystem.getEphermalKey(cipher, privateKey, publicKey);
+  return nonce.toString();
+};
+

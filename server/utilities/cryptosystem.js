@@ -28,6 +28,10 @@ class CryptoSystem {
   decryptResult(result, privateKey, publicKey) {
     return this.system.decryptMessage(result, privateKey, publicKey);
   }
+
+  getEphermalKey(cipher, privateKey, publicKey) {
+    return this.system.proveCorrectness(cipher, privateKey, publicKey);
+  }
 }
 
 module.exports = CryptoSystem;
