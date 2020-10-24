@@ -8,24 +8,24 @@ stages:
   # - test-nodes
   # - deploy-nodes
 
-# eslint:
-#   image: node:latest
-#   stage: test-code
-#   script:
-#     - cd server
-#     - npm ci
-#     - npx eslint --format gitlab .
-#   artifacts:
-#     reports:
-#       codequality: codequality.json
+eslint:
+  image: node:latest
+  stage: test-code
+  script:
+    - cd server
+    - npm ci
+    - npx eslint --format gitlab .
+  artifacts:
+    reports:
+      codequality: codequality.json
 
-# test-code:
-#   image: node:latest
-#   stage: test-code
-#   script:
-#     - cd server
-#     - npm ci
-#     - npm run test
+test-code:
+  image: node:latest
+  stage: test-code
+  script:
+    - cd server
+    - npm ci
+    - npm run test
 
 # test-node-1:
 #   stage: test-nodes
