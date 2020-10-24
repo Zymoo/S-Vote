@@ -5,8 +5,8 @@ variables:
   REPO: https://${CI_USER}:${CI_PASS}@gitlab.com/pbnather/s-vote.git
 stages:
   - test-code
-  - test-nodes
-  - deploy-nodes
+  # - test-nodes
+  # - deploy-nodes
 
 eslint:
   image: node:latest
@@ -27,113 +27,113 @@ test-code:
     - npm ci
     - npm run test
 
-test-node-1:
-  stage: test-nodes
-  tags:
-    - s-vote-node-1
-  before_script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - mkdir -p ~/.ssh
-    - eval $(ssh-agent -s)
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - 'which ping || ( apt-get update -y && apt-get install iputils-ping -y )'
-  script:
-    - ping -c 2 172.20.83.30
-    - ssh-add <(echo "$PRIVATE_KEY_NODE_1")
-    - ssh -o StrictHostKeyChecking=no root@172.20.83.30 "rm -rf ~/dev/${WORK_DIR}; mkdir -p ~/dev/${WORK_DIR}; cd ~/dev; git init; git clone -b ${BRANCH} ${REPO}; cd ~/dev/${WORK_DIR}/server; npm install; npm run node-test; rm -rf ~/dev"
-  only:
-    - branches
-  except:
-    - master
+# test-node-1:
+#   stage: test-nodes
+#   tags:
+#     - s-vote-node-1
+#   before_script:
+#     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+#     - mkdir -p ~/.ssh
+#     - eval $(ssh-agent -s)
+#     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+#     - 'which ping || ( apt-get update -y && apt-get install iputils-ping -y )'
+#   script:
+#     - ping -c 2 172.20.83.30
+#     - ssh-add <(echo "$PRIVATE_KEY_NODE_1")
+#     - ssh -o StrictHostKeyChecking=no root@172.20.83.30 "rm -rf ~/dev/${WORK_DIR}; mkdir -p ~/dev/${WORK_DIR}; cd ~/dev; git init; git clone -b ${BRANCH} ${REPO}; cd ~/dev/${WORK_DIR}/server; npm install; npm run node-test; rm -rf ~/dev"
+#   only:
+#     - branches
+#   except:
+#     - master
 
-test-node-2:
-  stage: test-nodes
-  tags:
-    - s-vote-node-2
-  before_script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - mkdir -p ~/.ssh
-    - eval $(ssh-agent -s)
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - 'which ping || ( apt-get update -y && apt-get install iputils-ping -y )'
-  script:
-    - ping -c 2 172.20.83.32
-    - ssh-add <(echo "$PRIVATE_KEY_NODE_2")
-    - ssh -o StrictHostKeyChecking=no root@172.20.83.32 "rm -rf ~/dev/${WORK_DIR}; mkdir -p ~/dev/${WORK_DIR}; cd ~/dev; git init; git clone -b ${BRANCH} ${REPO}; cd ~/dev/${WORK_DIR}/server; npm install; npm run node-test; rm -rf ~/dev"
-  only:
-    - branches
-  except:
-    - master
+# test-node-2:
+#   stage: test-nodes
+#   tags:
+#     - s-vote-node-2
+#   before_script:
+#     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+#     - mkdir -p ~/.ssh
+#     - eval $(ssh-agent -s)
+#     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+#     - 'which ping || ( apt-get update -y && apt-get install iputils-ping -y )'
+#   script:
+#     - ping -c 2 172.20.83.32
+#     - ssh-add <(echo "$PRIVATE_KEY_NODE_2")
+#     - ssh -o StrictHostKeyChecking=no root@172.20.83.32 "rm -rf ~/dev/${WORK_DIR}; mkdir -p ~/dev/${WORK_DIR}; cd ~/dev; git init; git clone -b ${BRANCH} ${REPO}; cd ~/dev/${WORK_DIR}/server; npm install; npm run node-test; rm -rf ~/dev"
+#   only:
+#     - branches
+#   except:
+#     - master
 
-test-node-3:
-  stage: test-nodes
-  tags:
-    - s-vote-node-3
-  before_script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - mkdir -p ~/.ssh
-    - eval $(ssh-agent -s)
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - 'which ping || ( apt-get update -y && apt-get install iputils-ping -y )'
-  script:
-    - ping -c 2 172.20.83.34
-    - ssh-add <(echo "$PRIVATE_KEY_NODE_3")
-    - ssh -o StrictHostKeyChecking=no root@172.20.83.34 "rm -rf ~/dev/${WORK_DIR}; mkdir -p ~/dev/${WORK_DIR}; cd ~/dev; git init; git clone -b ${BRANCH} ${REPO}; cd ~/dev/${WORK_DIR}/server; npm install; npm run node-test; rm -rf ~/dev"
-  only:
-    - branches
-  except:
-    - master
+# test-node-3:
+#   stage: test-nodes
+#   tags:
+#     - s-vote-node-3
+#   before_script:
+#     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+#     - mkdir -p ~/.ssh
+#     - eval $(ssh-agent -s)
+#     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+#     - 'which ping || ( apt-get update -y && apt-get install iputils-ping -y )'
+#   script:
+#     - ping -c 2 172.20.83.34
+#     - ssh-add <(echo "$PRIVATE_KEY_NODE_3")
+#     - ssh -o StrictHostKeyChecking=no root@172.20.83.34 "rm -rf ~/dev/${WORK_DIR}; mkdir -p ~/dev/${WORK_DIR}; cd ~/dev; git init; git clone -b ${BRANCH} ${REPO}; cd ~/dev/${WORK_DIR}/server; npm install; npm run node-test; rm -rf ~/dev"
+#   only:
+#     - branches
+#   except:
+#     - master
 
-deploy-node-1:
-  stage: deploy-nodes
-  tags:
-    - s-vote-node-1
-  before_script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - mkdir -p ~/.ssh
-    - eval $(ssh-agent -s)
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - 'which ping || ( apt-get update -y && apt-get install iputils-ping -y )'
-  script:
-    - ping -c 2 172.20.83.30
-    - ssh-add <(echo "$PRIVATE_KEY_NODE_1")
-    - rm -rf .git
-    - ssh -o StrictHostKeyChecking=no root@172.20.83.30 "rm -rf ~/${WORK_DIR}; mkdir -p ~/${WORK_DIR}; git init; git clone -b ${BRANCH} ${REPO}; cd ${WORK_DIR}; cd server; npm install; npm install forever -g; npm run test; npm run stop; npm run start-server"
-  only:
-    - master
+# deploy-node-1:
+#   stage: deploy-nodes
+#   tags:
+#     - s-vote-node-1
+#   before_script:
+#     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+#     - mkdir -p ~/.ssh
+#     - eval $(ssh-agent -s)
+#     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+#     - 'which ping || ( apt-get update -y && apt-get install iputils-ping -y )'
+#   script:
+#     - ping -c 2 172.20.83.30
+#     - ssh-add <(echo "$PRIVATE_KEY_NODE_1")
+#     - rm -rf .git
+#     - ssh -o StrictHostKeyChecking=no root@172.20.83.30 "rm -rf ~/${WORK_DIR}; mkdir -p ~/${WORK_DIR}; git init; git clone -b ${BRANCH} ${REPO}; cd ${WORK_DIR}; cd server; npm install; npm install forever -g; npm run test; npm run stop; npm run start-server"
+#   only:
+#     - master
 
-deploy-node-2:
-  stage: deploy-nodes
-  tags:
-    - s-vote-node-2
-  before_script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - mkdir -p ~/.ssh
-    - eval $(ssh-agent -s)
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - 'which ping || ( apt-get update -y && apt-get install iputils-ping -y )'
-  script:
-    - ping -c 2 172.20.83.32
-    - ssh-add <(echo "$PRIVATE_KEY_NODE_2")
-    - rm -rf .git
-    - ssh -o StrictHostKeyChecking=no root@172.20.83.32 "rm -rf ~/${WORK_DIR}; mkdir -p ~/${WORK_DIR}; git init; git clone -b ${BRANCH} ${REPO}; cd ${WORK_DIR}; cd server; npm install; npm install forever -g; npm run test; npm run stop; npm run start-server"
-  only:
-    - master
+# deploy-node-2:
+#   stage: deploy-nodes
+#   tags:
+#     - s-vote-node-2
+#   before_script:
+#     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+#     - mkdir -p ~/.ssh
+#     - eval $(ssh-agent -s)
+#     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+#     - 'which ping || ( apt-get update -y && apt-get install iputils-ping -y )'
+#   script:
+#     - ping -c 2 172.20.83.32
+#     - ssh-add <(echo "$PRIVATE_KEY_NODE_2")
+#     - rm -rf .git
+#     - ssh -o StrictHostKeyChecking=no root@172.20.83.32 "rm -rf ~/${WORK_DIR}; mkdir -p ~/${WORK_DIR}; git init; git clone -b ${BRANCH} ${REPO}; cd ${WORK_DIR}; cd server; npm install; npm install forever -g; npm run test; npm run stop; npm run start-server"
+#   only:
+#     - master
 
-deploy-node-3:
-  stage: deploy-nodes
-  tags:
-    - s-vote-node-3
-  before_script:
-    - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
-    - mkdir -p ~/.ssh
-    - eval $(ssh-agent -s)
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-    - 'which ping || ( apt-get update -y && apt-get install iputils-ping -y )'
-  script:
-    - ping -c 2 172.20.83.34
-    - ssh-add <(echo "$PRIVATE_KEY_NODE_3")
-    - rm -rf .git
-    - ssh -o StrictHostKeyChecking=no root@172.20.83.34 "rm -rf ~/${WORK_DIR}; mkdir -p ~/${WORK_DIR}; git init; git clone -b ${BRANCH} ${REPO}; cd ${WORK_DIR}; cd server; npm install; npm install forever -g; npm run test; npm run stop; npm run start-server"
-  only:
-    - master
+# deploy-node-3:
+#   stage: deploy-nodes
+#   tags:
+#     - s-vote-node-3
+#   before_script:
+#     - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
+#     - mkdir -p ~/.ssh
+#     - eval $(ssh-agent -s)
+#     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+#     - 'which ping || ( apt-get update -y && apt-get install iputils-ping -y )'
+#   script:
+#     - ping -c 2 172.20.83.34
+#     - ssh-add <(echo "$PRIVATE_KEY_NODE_3")
+#     - rm -rf .git
+#     - ssh -o StrictHostKeyChecking=no root@172.20.83.34 "rm -rf ~/${WORK_DIR}; mkdir -p ~/${WORK_DIR}; git init; git clone -b ${BRANCH} ${REPO}; cd ${WORK_DIR}; cd server; npm install; npm install forever -g; npm run test; npm run stop; npm run start-server"
+#   only:
+#     - master

@@ -36,7 +36,7 @@ exports.saveVoterKey = async function(pubKey) {
   await block.save();
 };
 
-exports.saveResult = async function(result, score) {
+exports.saveResult = async function(result, score, ephermal) {
   const resultTransaction = JSON.stringify(result);
   let block = new Block({
     tag: 'result',
@@ -47,6 +47,12 @@ exports.saveResult = async function(result, score) {
   block = new Block({
     tag: 'score',
     content: JSON.stringify(score),
+  });
+  await block.save();
+
+  block = new Block({
+    tag: 'ephermal',
+    content: JSON.stringify(ephermal),
   });
   await block.save();
 };

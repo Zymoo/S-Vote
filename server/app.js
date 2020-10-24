@@ -22,9 +22,12 @@ app.locals.shamir = 0;
 
 
 // eslint-disable-next-line no-unused-vars
-const mongoDB = 'mongodb+srv://server:4HyymKiNqmP3yDR@cluster0.orhvk.mongodb.net/SvoteBase?retryWrites=true&w=majority';
+// const mongoDB = 'mongodb+srv://server:4HyymKiNqmP3yDR@cluster0.orhvk.mongodb.net/SvoteBase?retryWrites=true&w=majority';
 // for testing purposes
 // mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
+const mongoDB = 'mongodb://root:example@localhost:27017/admin';
+mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
+
 app.locals.db = mongoose.connection;
 app.locals.db.on('error', console.error.bind(console, 'MongoDBerror:'));
 
