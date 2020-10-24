@@ -6,7 +6,7 @@ variables:
 stages:
   - test-code
   - test-nodes
-  - deploy-nodes
+  # - deploy-nodes
 
 eslint:
   image: node:latest
