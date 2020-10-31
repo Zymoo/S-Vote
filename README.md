@@ -35,22 +35,13 @@ All blockchain nodes can be interacted with using `geth` on your host machine (y
 To attach to a node use `geth attach http://127.0.0.1:PORT` — each node has it's own port.
 
 ### Nodes info
-+-----------+-------+----------------+--------------------------------+
-| NODE NAME |  PORT |  CONTAINER IP  |       ADDRESS/PUBLIC KEY       |
-+-----------+-------+----------------+--------------------------------+
-|           |       |                |                                |
-| server    |  8880 |  172.16.238.10 |  0xa5EFDe8c0F99b444dFC9c415A98 |
-|           |       |                | ab93D5Dc2ac9F                  |
-|           |       |                |                                |
-| node1     |  8881 |  172.16.238.11 |  0x6e94d071E5274Bdfec7c6c7aEbB |
-|           |       |                | b8c7c230ab271                  |
-|           |       |                |                                |
-| node2     |  8882 |  172.16.238.12 |  0xD2640f08100b1aF79b86995B04c |
-|           |       |                | 6bcF98EbB4d3c                  |
-|           |       |                |                                |
-| node3     |  8883 |  172.16.238.13 |  0x3B7E744E81751025B6A772211d3 |
-|           |       |                | 2F57670dD0F47                  |
-+-----------+-------+----------------+--------------------------------+
+
+| NODE NAME |  PORT |  CONTAINER IP  |               ADDRESS/PUBLIC KEY            |
+|-----------|-------|----------------|---------------------------------------------|
+| server    |  8880 |  172.16.238.10 |  0xa5EFDe8c0F99b444dFC9c415A98ab93D5Dc2ac9F |
+| node1     |  8881 |  172.16.238.11 |  0x6e94d071E5274Bdfec7c6c7aEbBb8c7c230ab271 |
+| node2     |  8882 |  172.16.238.12 |  0xD2640f08100b1aF79b86995B04c6bcF98EbB4d3c |
+| node3     |  8883 |  172.16.238.13 |  0x3B7E744E81751025B6A772211d32F57670dD0F47 |
 
 ### Useful geth commands
 
