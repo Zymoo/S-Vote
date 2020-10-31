@@ -2,7 +2,7 @@
 
 ## Run blockchain locally (with MongoDB fallback)
 
-Local blockchain follows the architecture of production environemnt. It consists of 4 containers, one server and three miner nodes. This network uses Proof of Authority. New blocks are published every 5s — if there are pending transactions.
+Local blockchain follows the architecture of production environemnt. It consists of 4 containers, one server and three miner nodes. This network uses Proof of Authority. New blocks are published if there exist pending transactions.
 
 To run ethereum network locally (one server node + 3 miner nodes) follow below steps:
 0. `cd` into this project root directory
@@ -10,9 +10,19 @@ To run ethereum network locally (one server node + 3 miner nodes) follow below s
 2. `docker-compose up` — this will start 6 containers, four running `geth`, 2 running `mongoDB` and its web interface, and show their logs. To pause just use `Ctr+C` and resume containers using `docker-compose up` again — internal state of the containers (blockchain) will be preserved
 3. `docker-compose down` — this will shutdown and remove the containers deleting their internal state (blockchain)
 
-### Interact with MongoDB (npm run start:dev)
+### Run block explorer
+
+To run block explorer:
+0. `cd` into this project root directory
+1. `cd blockchain`
+2. `docker-compose -f docker-compose-explorer.yml pull`
+3. `docker-compose -f docker-compose-explorer.yml up` — this will start 4 containers creating Epirus Block Explorer (it may take some time to start)
+
+Block explorer is available at `http://localhost/` (default port).
+
+### Interact with MongoDB
 **[Important]**  
-Two connect to container-based MongoDB instance run `npm run start:dev`.  
+Two connect to container-based MongoDB instance just run `npm start`.  
 **[Important]**
 
 Two MongoDB containers are running — one with database, and one with web interface.
