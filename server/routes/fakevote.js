@@ -13,7 +13,7 @@ const cryptography = require('../utilities/cryptography');
 
 /* Debug purpose - sanity check */
 router.get('/', function(req, res, next) {
-  res.send(req.app.locals.database);
+  res.send(req.app.locals.welcome);
 });
 
 /**
