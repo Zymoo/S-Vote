@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.4.16 <0.8.0;
 
-contract Test {
+contract Tester {
     uint number;
 
-    constructor (uint256 val) {
+    constructor (uint256 val) public {
         number = val;
     }
 

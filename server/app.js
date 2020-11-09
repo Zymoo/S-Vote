@@ -13,7 +13,7 @@ const fakevoteRouter = require('./routes/fakevote');
 
 const app = express();
 
-app.locals.database = {description: 'Looking good'};
+app.locals.welcome = {description: 'Looking good'};
 app.locals.token = crypto.randomBytes(64).toString('hex');
 app.locals.shares = new Set();
 app.locals.numbers = [1, 100, 10000, 1000000];
@@ -22,11 +22,10 @@ app.locals.shamir = 0;
 
 
 // eslint-disable-next-line no-unused-vars
-// const mongoDB = 'mongodb+srv://server:4HyymKiNqmP3yDR@cluster0.orhvk.mongodb.net/SvoteBase?retryWrites=true&w=majority';
-// for testing purposes
-// mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
-const mongoDB = 'mongodb://root:example@localhost:27017/admin';
+const mongoDB = 'mongodb+srv://server:4HyymKiNqmP3yDR@cluster0.orhvk.mongodb.net/SvoteBase?retryWrites=true&w=majority';
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
+// const mongoDB = 'mongodb://root:example@localhost:27017/admin';
+// mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
 
 app.locals.db = mongoose.connection;
 app.locals.db.on('error', console.error.bind(console, 'MongoDBerror:'));

@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: GPL-3.0
 pragma solidity >=0.6.12;
 pragma experimental ABIEncoderV2;
 
@@ -16,7 +17,7 @@ contract Initialization {
     Candidate[] candidates;
     Voter[] registeredVoters;
 
-    constructor (string memory key, Candidate[] memory candids, Voter[] memory voters) public {
+    constructor (string memory key, Candidate[] memory candids, Voter[] memory voters) {
         publicKey = key;
         candidates = candids;
         registeredVoters = voters;
