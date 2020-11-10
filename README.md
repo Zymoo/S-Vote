@@ -54,3 +54,14 @@ After attaching to the node console use below commands. More commands at https:/
 * `eth.getBalance(address)` — show ETH balance of given account, eg. get ETH balance of *node2* `eth.getBalance("0xD2640f08100b1aF79b86995B04c6bcF98EbB4d3c")`
 
 * `eth.sendTransaction({from: address, to: address, value: amount})` — send transaction from unlocked address (adress of the attached node) to other account, eg. sending 1000 ETH from *server* to *node2*: `eth.sendTransaction({from: "0xa5EFDe8c0F99b444dFC9c415A98ab93D5Dc2ac9F",to: "0xD2640f08100b1aF79b86995B04c6bcF98EbB4d3c", value: "1000"})`
+
+## Truffle integration
+
+download & install ganache from https://www.trufflesuite.com/ganache
+
+npm install -g truffle 
+
+truffle compile
+truffle migrate --network development
+
+truffle migrate --reset
