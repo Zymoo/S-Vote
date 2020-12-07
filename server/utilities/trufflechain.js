@@ -6,7 +6,7 @@ const contract = require('truffle-contract');
 
 const contractJson = require(
     '../truffle_contracts/build/contracts/Election.json');
-const contractAddress = '0xcA8B20d09f0cd1c3f2D7591C2663CE88A9831F6B';
+const contractAddress = '0x7555e10036C2feA9dF695624A2085941B7f8f3f0';
 const ElectionContract = contract({
   abi: contractJson.abi,
   unlinked_binary: contractJson.bytecode,
