@@ -1022,12 +1022,12 @@
     "5777": {
       "events": {},
       "links": {},
-      "address": "0xBa7b918027832dfF7E8B44D658F8227B6192e3d8",
-      "transactionHash": "0xea9d58591cd26f09a184f73a828b71db59cf9f886d221baad8b78ac0c7568e0d"
+      "address": "0x563BE919fb4Df01A03D05f7a0dE48e9C9A4CbccD",
+      "transactionHash": "0xedf13703375a2ff9de24955785dfbab9333913f455a19c53a92de78233b504fa"
     }
   },
   "schemaVersion": "3.3.2",
-  "updatedAt": "2020-11-09T09:33:42.784Z",
+  "updatedAt": "2020-11-10T14:16:51.115Z",
   "networkType": "ethereum",
   "devdoc": {
     "methods": {}
