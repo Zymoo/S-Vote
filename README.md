@@ -62,6 +62,7 @@ download & install ganache from https://www.trufflesuite.com/ganache
 npm install -g truffle 
 
 truffle compile
+
 truffle migrate --network development
 
 truffle migrate --reset
