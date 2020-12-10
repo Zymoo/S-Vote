@@ -71,11 +71,3 @@ exports.getTaggedBlockchain = async function(tag) {
   const blockchain = data.map((block) => block.content);
   return blockchain;
 };
-
-exports.printBlockchain = async function() {
-  const data = await Block.find();
-  const blockchain = data.map((block) => JSON.parse(block.content));
-  blockchain.forEach((element) => {
-    console.log(element);
-  });
-};

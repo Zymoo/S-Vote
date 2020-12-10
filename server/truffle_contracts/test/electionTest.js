@@ -1,4 +1,5 @@
 const chai = require('chai');
+const Natural = require('bn.js');
 const expect = chai.expect;
 const Election = artifacts.require('Election');
 
@@ -22,9 +23,9 @@ contract('Running Election tests', async (accounts) => {
     expect(parsedResult).to.deep.equal(nameParams.concat(numParams));
   });
 
-  it('should save and return result', async () => {
+  it('should save and return big number result', async () => {
     const instance = await Election.deployed();
-    const sum = 1;
+    const sum = new Natural('90000000000000000000000000');
     const scores = [1, 2, 3];
     const e = '1x2y';
     await instance.saveResult(sum, scores, e, {from: accounts[1]});

@@ -9,8 +9,8 @@ contract Election {
     }
 
     struct Result {
-        int256 voteSum;
-        int64[] individualScores;
+        uint256 voteSum;
+        uint64[] individualScores;
         string ephermalKey;
     }
 
@@ -30,7 +30,7 @@ contract Election {
         }
     }
 
-    function saveResult(int256 sum, int64[] memory scores, string memory ephermal) public {
+    function saveResult(uint256 sum, uint64[] memory scores, string memory ephermal) public {
         electionResult = Result({voteSum: sum, individualScores: scores, ephermalKey: ephermal});
     }
 

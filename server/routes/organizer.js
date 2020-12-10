@@ -66,7 +66,9 @@ router.post('/begin', async function(req, res, next) {
     });
   });
   const candidateNumbers = req.app.locals.numbers;
-  await database.saveConfig(pubKey, candidates, voters, candidateNumbers);
+  if (req.app.locals.dbsave) {
+    await database.saveConfig(pubKey, candidates, voters, candidateNumbers);
+  }
   res.status(200).send(privKey);
 });
 
@@ -87,10 +89,9 @@ router.post('/end', async function(req, res, next) {
     const result = cryptography.decryptResult(resultcipher, privKey, pubKey);
     const ephermal = cryptography
         .getEphermalKey(resultcipher, privKey, pubKey);
-    const score = cryptography.calculateScore(result.toString(),
+    const scores = cryptography.calculateScore(result.toString(),
         req.app.locals.numbers);
-    console.log(score);
-    await database.saveResult(result.toString(), score, ephermal);
+    await database.saveResult(result.toString(), scores, ephermal);
     return res.status(200).send(result.toString());
   }
   res.status(200).send('Got your part!');

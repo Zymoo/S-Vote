@@ -1,3 +1,4 @@
+const Natural = require('bn.js');
 const Web3 = require('web3');
 const provider = new Web3.providers.HttpProvider('http://localhost:7545');
 const contract = require('truffle-contract');
@@ -15,30 +16,61 @@ const ElectionContract = contract({
 ElectionContract.setProvider(provider);
 
 
-exports.saveElectionKey = async function() {
-  const instance = await ElectionContract.at(contractAddress);
-  try {
-    const result = await instance
-        .savePublicKey('TestKey', {from: serverAddress});
-    console.log(result);
-  } catch (err) {
-    console.log(err);
-  };
-  return null;
+exports.saveElectionKey = async function(electionKey) {
+  await instance.savePublicKey(electionKey, {from: serverAddress});
 };
 
-exports.saveCandidates = async function() {
+exports.saveCandidates = async function(names, numbers) {
   const instance = await ElectionContract.at(contractAddress);
-  const nameParams = ['Jan Kowalski', 'Borys Nowak'];
-  const numParams = [1, 1000];
-  try {
-    const result = await instance
-        .saveCandidates(nameParams, numParams, {from: serverAddress});
-    console.log(result);
-  } catch (err) {
-    console.log(err);
-  };
-  return null;
+  await instance.saveCandidates(names, numbers, {from: serverAddress});
+};
+
+exports.saveVoterKey = async function(key) {
+  const instance = await ElectionContract.at(contractAddress);
+  await instance.saveVoterKey(key, {from: serverAddress});
+};
+
+exports.saveVoterKey = async function(key) {
+  const instance = await ElectionContract.at(contractAddress);
+  await instance.saveVoterKey(key, {from: serverAddress});
+};
+
+exports.saveVote = async function(vote) {
+  const instance = await ElectionContract.at(contractAddress);
+  await instance.saveVote(vote, {from: serverAddress});
+};
+
+exports.saveResult = async function(result, scores, ephermal) {
+  const instance = await ElectionContract.at(contractAddress);
+  const intResult = new Natural(result);
+  const intScores = scores.map((x) => new Natural(x));
+  await instance
+      .saveResult(intResult, intScores, ephermal, {from: serverAddress});
+};
+
+exports.getVotes = async function() {
+  const instance = await ElectionContract.at(contractAddress);
+  const result = instance.getVotes({from: serverAddress});
+  return result;
+};
+
+exports.getElectionKey = async function() {
+  const instance = await ElectionContract.at(contractAddress);
+  const result = instance.getPublicKey({from: serverAddress});
+  return result;
+};
+
+exports.getCandidates = async function() {
+  const instance = await ElectionContract.at(contractAddress);
+  const result = instance.getCandidates({from: serverAddress});
+  const parsedResult = result.map((x) => (x.fullName + ':' + x.number);
+  return parsedResult;
+};
+
+exports.getResult = async function() {
+  const instance = await ElectionContract.at(contractAddress);
+  const result = instance.getPublicKey({from: serverAddress});
+  return result;
 };
 
 // Showcase for interacting with contract on blockchain
