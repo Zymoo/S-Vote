@@ -8,6 +8,7 @@ const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const database = require('../utilities/database');
+const chain = require('../utilities/chain');
 
 /* Debug purpose - sanity check */
 router.get('/', function(req, res, next) {
@@ -47,9 +48,13 @@ function authenticateToken(req, res, next) {
  * @param {pubKey}
  * @returns {status}
  */
-router.post('/keysave', authenticateToken, function(req, res, next) {
+router.post('/keysave', authenticateToken, async function(req, res, next) {
   const pubKey = req.body.pubKey;
-  database.saveVoterKey(pubKey);
+  if (req.app.locals.dbsave) {
+    await database.saveVoterKey(pubKey);
+  } else {
+    await chain.saveVoterKey(pubKey);
+  }
   res.send('Passed authentication & saved key on the blockchain');
 });
 

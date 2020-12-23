@@ -9,6 +9,7 @@ const router = express.Router();
 const cryptography = require('../utilities/cryptography');
 const database = require('../utilities/database');
 const nodemailer = require('nodemailer');
+const chain = require('../utilities/chain');
 
 /* Debug purpose - sanity check */
 router.get('/', function(req, res, next) {
@@ -68,6 +69,8 @@ router.post('/begin', async function(req, res, next) {
   const candidateNumbers = req.app.locals.numbers;
   if (req.app.locals.dbsave) {
     await database.saveConfig(pubKey, candidates, voters, candidateNumbers);
+  } else {
+    await chain.saveConfig(pubKey, candidates, voters, candidateNumbers);
   }
   res.status(200).send(privKey);
 });
@@ -81,9 +84,19 @@ router.post('/begin', async function(req, res, next) {
  */
 router.post('/end', async function(req, res, next) {
   req.app.locals.shares.add(req.body.share);
-  const pubKey = (await database.getTaggedBlockchain('electionkey'))[0];
+  let pubKey;
+  if (req.app.locals.dbsave) {
+    pubKey = (await database.getTaggedBlockchain('electionkey'))[0];
+  } else {
+    pubKey = await chain.getElectionKey();
+  }
   if (req.app.locals.shares.size >= req.app.locals.shamir) {
-    const votes = await database.getTaggedBlockchain('vote');
+    let votes;
+    if (req.app.locals.dbsave) {
+      votes = await database.getTaggedBlockchain('vote');
+    } else {
+      votes = await chain.getVotes();
+    }
     const resultcipher = cryptography.combineVotes(votes, pubKey);
     const privKey = cryptography.combineKey(Array.from(req.app.locals.shares));
     const result = cryptography.decryptResult(resultcipher, privKey, pubKey);
@@ -91,7 +104,11 @@ router.post('/end', async function(req, res, next) {
         .getEphermalKey(resultcipher, privKey, pubKey);
     const scores = cryptography.calculateScore(result.toString(),
         req.app.locals.numbers);
-    await database.saveResult(result.toString(), scores, ephermal);
+    if (req.app.locals.dbsave) {
+      await database.saveResult(result.toString(), scores, ephermal);
+    } else {
+      // await chain.saveResult(result, socres, ephermal);
+    }
     return res.status(200).send(result.toString());
   }
   res.status(200).send('Got your part!');

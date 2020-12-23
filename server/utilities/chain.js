@@ -14,7 +14,8 @@ exports.saveResult = async function(result, scores, ephermal) {
 };
 
 exports.saveVote = async function(vote) {
-  await trufflechain.saveVoterKey(vote);
+  console.log(typeof vote);
+  await trufflechain.saveVote(vote);
 };
 
 exports.getVotes = async function() {

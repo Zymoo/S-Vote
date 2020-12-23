@@ -14,7 +14,7 @@ const fakevoteRouter = require('./routes/fakevote');
 const app = express();
 
 app.locals.welcome = {description: 'Looking good'};
-app.locals.dbsave = true;
+app.locals.dbsave = false;
 app.locals.token = crypto.randomBytes(64).toString('hex');
 app.locals.shares = new Set();
 app.locals.numbers = [1, 100, 10000, 1000000];

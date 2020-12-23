@@ -4,8 +4,8 @@ const provider = new Web3.providers.HttpProvider('http://localhost:7545');
 const contract = require('truffle-contract');
 const contractPath = '../truffle_contracts/build/contracts/Election.json';
 const contractJson = require(contractPath);
-const serverAddress = '0x542E86396c4aBe1394F7B7d5Cec628d5878fC8cD';
-const contractAddress = '0x1525b42Cd6Bb18a8bf93De9Dc0d2a20a1B2Be43D';
+const serverAddress = '0xd127daba8aD51229853802741753d4BdCfe90cE3';
+const contractAddress = '0xe996beAec8B2a3efEC708FC384e7F4BCDD41Abf5';
 // IMPORTANT - after each new migration this adress will change!
 
 
@@ -17,6 +17,7 @@ ElectionContract.setProvider(provider);
 
 
 exports.saveElectionKey = async function(electionKey) {
+  const instance = await ElectionContract.at(contractAddress);
   await instance.savePublicKey(electionKey, {from: serverAddress});
 };
 
@@ -50,19 +51,20 @@ exports.saveResult = async function(result, scores, ephermal) {
 
 exports.getVotes = async function() {
   const instance = await ElectionContract.at(contractAddress);
-  const result = instance.getVotes({from: serverAddress});
+  const result = await instance.getVotes({from: serverAddress});
   return result;
 };
 
 exports.getElectionKey = async function() {
   const instance = await ElectionContract.at(contractAddress);
-  const result = instance.getPublicKey({from: serverAddress});
+  const result = await instance.getPublicKey({from: serverAddress});
   return result;
 };
 
 exports.getCandidates = async function() {
   const instance = await ElectionContract.at(contractAddress);
-  const result = instance.getCandidates({from: serverAddress});
+  const result = await instance.getCandidates({from: serverAddress});
+  console.log(result);
   const parsedResult = result.map((x) => (x.fullName + ':' + x.number));
   return parsedResult;
 };
