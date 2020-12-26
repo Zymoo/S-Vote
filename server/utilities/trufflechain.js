@@ -1,12 +1,14 @@
-/* eslint-disable require-jsdoc */
+const Natural = require('bn.js');
 const Web3 = require('web3');
 const provider = new Web3.providers.HttpProvider('http://localhost:7545');
 const contract = require('truffle-contract');
-// eslint-disable-next-line max-len
+const contractPath = '../truffle_contracts/build/contracts/Election.json';
+const contractJson = require(contractPath);
+const serverAddress = '0xd127daba8aD51229853802741753d4BdCfe90cE3';
+const contractAddress = '0xe996beAec8B2a3efEC708FC384e7F4BCDD41Abf5';
+// IMPORTANT - after each new migration this adress will change!
 
-const contractJson = require(
-    '../truffle_contracts/build/contracts/Election.json');
-const contractAddress = '0x7555e10036C2feA9dF695624A2085941B7f8f3f0';
+
 const ElectionContract = contract({
   abi: contractJson.abi,
   unlinked_binary: contractJson.bytecode,
@@ -14,38 +16,69 @@ const ElectionContract = contract({
 ElectionContract.setProvider(provider);
 
 
-exports.saveElectionKey = async function() {
+exports.saveElectionKey = async function(electionKey) {
   const instance = await ElectionContract.at(contractAddress);
-  const fromAddress = '0x6aC3F1604BDF80Af4Bde610617F90b471Cf46D4e';
-  try {
-    const result = await instance
-        .savePublicKey('TestKey', {from: fromAddress});
-    console.log(result);
-  } catch (err) {
-    console.log(err);
-  };
-  return null;
+  await instance.savePublicKey(electionKey, {from: serverAddress});
 };
 
-exports.saveCandidates = async function() {
+exports.saveCandidates = async function(names, numbers) {
   const instance = await ElectionContract.at(contractAddress);
-  const fromAddress = '0x6aC3F1604BDF80Af4Bde610617F90b471Cf46D4e';
-  const nameParams = ['Jan Kowalski', 'Borys Nowak'];
-  const numParams = [1, 1000];
-  try {
-    const result = await instance
-        .saveCandidates(nameParams, numParams, {from: fromAddress});
-    console.log(result);
-  } catch (err) {
-    console.log(err);
-  };
-  return null;
+  await instance.saveCandidates(names, numbers, {from: serverAddress});
+};
+
+exports.saveVoterKey = async function(key) {
+  const instance = await ElectionContract.at(contractAddress);
+  await instance.saveVoterKey(key, {from: serverAddress});
+};
+
+exports.saveVoterKey = async function(key) {
+  const instance = await ElectionContract.at(contractAddress);
+  await instance.saveVoterKey(key, {from: serverAddress});
+};
+
+exports.saveVote = async function(vote) {
+  const instance = await ElectionContract.at(contractAddress);
+  await instance.saveVote(vote, {from: serverAddress});
+};
+
+exports.saveResult = async function(result, scores, ephermal) {
+  const instance = await ElectionContract.at(contractAddress);
+  const intResult = new Natural(result);
+  const intScores = scores.map((x) => new Natural(x));
+  await instance
+      .saveResult(intResult, intScores, ephermal, {from: serverAddress});
+};
+
+exports.getVotes = async function() {
+  const instance = await ElectionContract.at(contractAddress);
+  const result = await instance.getVotes({from: serverAddress});
+  return result;
+};
+
+exports.getElectionKey = async function() {
+  const instance = await ElectionContract.at(contractAddress);
+  const result = await instance.getPublicKey({from: serverAddress});
+  return result;
+};
+
+exports.getCandidates = async function() {
+  const instance = await ElectionContract.at(contractAddress);
+  const result = await instance.getCandidates({from: serverAddress});
+  console.log(result);
+  const parsedResult = result.map((x) => (x.fullName + ':' + x.number));
+  return parsedResult;
+};
+
+exports.getResult = async function() {
+  const instance = await ElectionContract.at(contractAddress);
+  const result = instance.getPublicKey({from: serverAddress});
+  return result;
 };
 
 // Showcase for interacting with contract on blockchain
 exports.testerIncrement = async function() {
-  // eslint-disable-next-line max-len
-  const contractJson = require('../truffle_contracts/build/contracts/Tester.json');
+  const contractJson = require(
+      '../truffle_contracts/build/contracts/Tester.json');
   const contractAddress = '0xa4570D3B5C7aA483DD6f977E7134a4a8bc308cD1';
   const MyContract = contract({
     abi: contractJson.abi,
