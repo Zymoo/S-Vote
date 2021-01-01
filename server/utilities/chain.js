@@ -14,7 +14,6 @@ exports.saveResult = async function(result, scores, ephermal) {
 };
 
 exports.saveVote = async function(vote) {
-  console.log(typeof vote);
   await trufflechain.saveVote(vote);
 };
 

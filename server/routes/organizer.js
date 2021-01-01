@@ -107,7 +107,7 @@ router.post('/end', async function(req, res, next) {
     if (req.app.locals.dbsave) {
       await database.saveResult(result.toString(), scores, ephermal);
     } else {
-      // await chain.saveResult(result, socres, ephermal);
+      await chain.saveResult(result, scores, ephermal);
     }
     return res.status(200).send(result.toString());
   }
