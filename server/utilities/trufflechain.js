@@ -5,7 +5,7 @@ const contract = require('truffle-contract');
 const contractPath = '../truffle_contracts/build/contracts/Election.json';
 const contractJson = require(contractPath);
 const serverAddress = '0xd127daba8aD51229853802741753d4BdCfe90cE3';
-const contractAddress = '0xe996beAec8B2a3efEC708FC384e7F4BCDD41Abf5';
+const contractAddress = '0x43eeAE4Ed476f69C3E42153a60d0e92F924120a0';
 // IMPORTANT - after each new migration this adress will change!
 
 
