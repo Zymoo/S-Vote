@@ -36,7 +36,6 @@ router.post('/vote', async function(req, res, next) {
   }
   for (const candidate of candidates) {
     const candidateName = candidate.split(':')[0];
-    console.log(candidateName);
     const candidateNumber = candidate.split(':')[1];
     if (candidateName === chosenCandidate) {
       const encryptedVote = cryptography
