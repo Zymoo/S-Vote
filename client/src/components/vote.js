@@ -1,37 +1,32 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Register from './register';
-var Web3 = require('web3');
-var web3 = new Web3(Web3.givenProvider);
+const CryptoSystem = require('../copy/cryptosystem');
+let crypto = new CryptoSystem();
+const chain = require('../copy/trufflechain');
 
 export default class Vote extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      wallet: null,
       names: null,
       numbers: null,
       electionKey: null,
+      candidate: null
     }
   }
 
-  onSubmit = (event) => {
+  setGender(event) {
+    this.setState({ candidate: event.target.value});
+  }
+
+  onSubmit = async (event) => {
     event.preventDefault();
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            email: this.state.email,
-            password: this.state.password
-        })
-    };
-    const serverURL = "http://localhost:3001/voter/register/";
-    fetch(serverURL, requestOptions)
-        .then(result => result.json())
-        .then(result => {
-            this.setState({
-                sessionToken: result
-            })
-        });
+    let vote = this.state.candidate;
+    let encrypted = crypto.encryptVote(this.state.electionKey, vote);
+    console.log(this.state.wallet.key);
+    await chain.saveVote(encrypted, this.state.wallet.address, this.state.wallet.key);
 }
 
   componentDidMount() {
@@ -69,7 +64,7 @@ export default class Vote extends Component {
               (this.state.names).map((name, i) => {
                 return (
                   <li className="list-group-item center-block text-center" key={`poll-${i}`}>
-                    <input type="radio" name="candidate" id={i} />
+                    <input value ={i} onChange={this.setGender.bind(this)} type="radio" name="candidate" id={i} />
                     <i className="center-block text-center" aria-hidden="true"> {name} </i>
                   </li>
                 )
