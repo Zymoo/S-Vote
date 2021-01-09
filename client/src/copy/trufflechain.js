@@ -2,21 +2,21 @@ var Web3 = require('web3');
 var web3 = new Web3(Web3.givenProvider || 'http://localhost:7545');
 const provider = new Web3.providers.HttpProvider('http://localhost:7545');
 const contractJson = require('./Election.json');
-const contractAddress = '0x408dCace05F96c1631DFcd6dD461e0Fd5A3e5D61';
+const contractAddress = '0x43314DC2b8CB5aaE07b3C55a9C2A7F0AC65BaC8D';
 // IMPORTANT - after each new migration this adress will change!
 
 
 exports.saveVote = async function(vote, address, privateKey) {
   const MyContract = new web3.eth.Contract((contractJson.abi), contractAddress);
   MyContract.setProvider(provider);
-  console.log("QQQ");
   const tx = {
     // this could be provider.addresses[0] if it exists
     from: address, 
     // target address, this could be a smart contract address
     to: contractAddress, 
     // optional if you want to specify the gas limit 
-    gas: 105624, 
+    gas: 6721975, 
+    gasPrice: 0, 
     // optional if you are invoking say a payable function 
     // value: 2112480000000000,
     // this encodes the ABI of the method and the arguements
