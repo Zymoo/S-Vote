@@ -1,11 +1,11 @@
 /* eslint-disable require-jsdoc */
-const SCcompiler = require('..\\blockchain\\smart-contracts-compiler');
+const SCcompiler = require('../blockchain/smart-contracts-compiler');
 const Web3 = require('web3');
 const fs = require('fs-extra');
 web3 = new Web3('http://localhost:7545');
 
 const serverAddress = '0x9EA74325AFA5e4A20e4568b71083275bb929136b';
-const deploymentAddress = '0x6b57d6241C5e530039E6ea8CFFaF4aB18956dAeA';
+const deploymentAddress = '0xfeBA40102e50c05730Fc505c0f5DC3E41454EA8a';
 // 0xa5EFDe8c0F99b444dFC9c415A98ab93D5Dc2ac9F
 
 exports.getTestAccount = async function() {

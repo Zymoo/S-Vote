@@ -4,8 +4,8 @@ const provider = new Web3.providers.HttpProvider('http://localhost:7545');
 const contract = require('truffle-contract');
 const contractPath = '../truffle_contracts/build/contracts/Election.json';
 const contractJson = require(contractPath);
-const serverAddress = '0x5E5D5642BBAd9392b2f460d5531505ccD6ADe3Db';
-const contractAddress = '0x43314DC2b8CB5aaE07b3C55a9C2A7F0AC65BaC8D';
+const serverAddress = '0x0305BFC3FD5e6F0c48cb81afc424356dBa2a23E8';
+const contractAddress = '0x2efF328f1161577fc8E59af0f4BE80e60bdD69F3';
 // IMPORTANT - after each new migration this adress will change!
 
 
@@ -14,7 +14,6 @@ const ElectionContract = contract({
   unlinked_binary: contractJson.bytecode,
 });
 ElectionContract.setProvider(provider);
-
 
 exports.saveElectionKey = async function(electionKey) {
   const instance = await ElectionContract.at(contractAddress);
@@ -29,11 +28,7 @@ exports.saveCandidates = async function(names, numbers) {
 exports.saveVoterKey = async function(key) {
   const instance = await ElectionContract.at(contractAddress);
   await instance.saveVoterKey(key, {from: serverAddress});
-};
-
-exports.saveVoterKey = async function(key) {
-  const instance = await ElectionContract.at(contractAddress);
-  await instance.saveVoterKey(key, {from: serverAddress});
+  await web3.eth.sendTransaction({from:serverAddress, to:key, value:1});
 };
 
 exports.saveVote = async function(vote) {

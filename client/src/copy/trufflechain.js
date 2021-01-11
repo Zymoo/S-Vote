@@ -2,7 +2,7 @@ var Web3 = require('web3');
 var web3 = new Web3(Web3.givenProvider || 'http://localhost:7545');
 const provider = new Web3.providers.HttpProvider('http://localhost:7545');
 const contractJson = require('./Election.json');
-const contractAddress = '0x43314DC2b8CB5aaE07b3C55a9C2A7F0AC65BaC8D';
+const contractAddress = '0x2efF328f1161577fc8E59af0f4BE80e60bdD69F3';
 // IMPORTANT - after each new migration this adress will change!
 
 
@@ -17,6 +17,7 @@ exports.saveVote = async function(vote, address, privateKey) {
     // optional if you want to specify the gas limit 
     gas: 6721975, 
     gasPrice: 0, 
+    value: 1,
     // optional if you are invoking say a payable function 
     // value: 2112480000000000,
     // this encodes the ABI of the method and the arguements

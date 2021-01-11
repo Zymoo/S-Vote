@@ -20,6 +20,8 @@ contract Election {
     string[] votes;
     string publicKey;
 
+    receive() external payable {}  // allows to receive ether
+
     function savePublicKey (string memory key) public {
         publicKey = key;
     }
@@ -38,7 +40,8 @@ contract Election {
         voterKeys.push(newKey);
     }
 
-    function saveVote(string memory newVote) public {
+    function saveVote(string memory newVote) public payable {
+        require(msg.value == 1);  // require to send 1ETH along the new vote
         votes.push(newVote);
     }
 
