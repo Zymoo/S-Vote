@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import Register from './register';
+import Register from './Register';
 const CryptoSystem = require('../copy/cryptosystem');
 let crypto = new CryptoSystem();
 const chain = require('../copy/trufflechain');
@@ -58,6 +57,7 @@ export default class Vote extends Component {
     let choice = '';
     if (this.state.names) {
       choice = (
+        <div className="inner">
         <ul className="list-group">
           <form onSubmit={this.onSubmit}>
             {
@@ -73,6 +73,7 @@ export default class Vote extends Component {
             <button type="submit" value="Submit" className="btn btn-dark btn-lg btn-block"> Vote</button>
           </form>
         </ul>
+        </div>
       )
     }
     if (this.state.wallet) {

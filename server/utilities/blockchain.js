@@ -4,8 +4,8 @@ const Web3 = require('web3');
 const fs = require('fs-extra');
 web3 = new Web3('http://localhost:7545');
 
-const serverAddress = '0x9EA74325AFA5e4A20e4568b71083275bb929136b';
-const deploymentAddress = '0xfeBA40102e50c05730Fc505c0f5DC3E41454EA8a';
+const serverAddress = '0xAa20Ca5f1a2B4D72BB3db2F490590dae9743dbD1';
+const deploymentAddress = '0x6b57d6241C5e530039E6ea8CFFaF4aB18956dAeA';
 // 0xa5EFDe8c0F99b444dFC9c415A98ab93D5Dc2ac9F
 
 exports.getTestAccount = async function() {
