@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Key from './key';
+import Key from './Key';
 
 export default class Register extends Component {
     constructor(props) {
@@ -48,21 +48,23 @@ export default class Register extends Component {
             return <Key savedToken={this.state.sessionToken} />;
         }
         return (
-            <form onSubmit={this.onSubmit}>
-                <h3>Register now!</h3>
+            <div className="inner">
+                <form onSubmit={this.onSubmit}>
+                    <h3>Register now!</h3>
 
-                <div className="form-group">
-                    <label>Email</label>
-                    <input id="email" onChange={this.handleEmailChange} type="email" value={this.state.email} className="form-control" placeholder="Enter email" />
-                </div>
+                    <div className="form-group">
+                        <label>Email</label>
+                        <input id="email" onChange={this.handleEmailChange} type="email" value={this.state.email} className="form-control" placeholder="Enter email" />
+                    </div>
 
-                <div className="form-group">
-                    <label>Authorization code</label>
-                    <input id="password" onChange={this.handlePasswordChange} type="password" value={this.state.password} className="form-control" placeholder="Enter code" />
-                </div>
+                    <div className="form-group">
+                        <label>Authorization code</label>
+                        <input id="password" onChange={this.handlePasswordChange} type="password" value={this.state.password} className="form-control" placeholder="Enter code" />
+                    </div>
 
-                <button type="submit" value="Submit" className="btn btn-dark btn-lg btn-block">Register</button>
-            </form>
+                    <button type="submit" value="Submit" className="btn btn-dark btn-lg btn-block">Register</button>
+                </form>
+            </div>
         );
     }
 };

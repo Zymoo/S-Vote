@@ -71,3 +71,26 @@ exports.getTaggedBlockchain = async function(tag) {
   const blockchain = data.map((block) => block.content);
   return blockchain;
 };
+
+exports.initRoleDatebase = (role) => {
+  role.estimatedDocumentCount((err, count) => {
+    if (!err && count === 0) {
+      new Role({
+        name: 'shareholder',
+      }).save((err) => {
+        if (err) {
+          console.log('error', err);
+        }
+        console.log('added \'shareholder\' to roles collection');
+      });
+      new Role({
+        name: 'organizer',
+      }).save((err) => {
+        if (err) {
+          console.log('error', err);
+        }
+        console.log('added \'organizer\' to roles collection');
+      });
+    }
+  });
+};
