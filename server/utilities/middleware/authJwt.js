@@ -59,7 +59,7 @@ isOrganizer = async (req, res, next) => {
 };
 
 isShareHolder = async (req, res, next) => {
-  User.findById(req.userId).exec((err, user) => {
+  User.findById(req.body.userId).exec((err, user) => {
     if (err) {
       res.status(500).send({message: err});
       return;
