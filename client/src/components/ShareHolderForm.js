@@ -7,9 +7,11 @@ export default class ShareHolderForm extends React.Component {
   };
 
   handleSubmit = async (e) => {
+    let user = JSON.parse(localStorage.getItem("auth"));
     const request = new Request("http://localhost:3001/organizer/end", {
       method: "POST",
       body: JSON.stringify({
+        userId: user.id,
         share: this.state.share,
       }),
       headers: new Headers({
