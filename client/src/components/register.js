@@ -32,6 +32,10 @@ export default class Register extends Component {
                 this.setState({
                     sessionToken: result
                 })
+            }).then(() => {
+                localStorage.setItem('auth-code', this.state.password)
+            }).catch((err) => {
+                console.log(err)
             });
     }
 

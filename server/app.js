@@ -13,8 +13,11 @@ const organizerRouter = require('./routes/organizer');
 const fakevoteRouter = require('./routes/fakevote');
 const authRouter = require('./routes/auth');
 
-const initDatabase = require('./utilities/database').initRoleDatebase;
 const isAuth = require('./utilities/middleware/authJwt').verifyToken;
+const {
+  initRoleDatebase,
+  initCodeDatabase /* , dropCodeDatabase*/,
+} = require('./utilities/database');
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -53,7 +56,10 @@ app.locals.db.mongoose
     })
     .then(() => {
       console.log('Successfully connected to MongoDB.');
-      initDatabase(app.locals.db.role);
+      initRoleDatebase();
+      // dropCodeDatabase();
+    }).then(() => {
+      initCodeDatabase();
     })
     .catch((err) => {
       console.error('Connection error', err);
