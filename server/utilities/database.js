@@ -102,10 +102,10 @@ exports.initCodeDatabase = () => {
   return new Promise((res, rej) => {
     setTimeout(() => {
       Code.estimatedDocumentCount((err, count) => {
-        if (!err && count !== 1000) {
+        if (!err && count < 1000) {
           console.log('Populating database with authorization codes');
           const authCodes = new Set();
-          while (authCodes.size < 1000) {
+          while (authCodes.size < 1000 - count) {
             authCodes.add(uuidv4());
           }
           for (const code of authCodes) {
@@ -126,6 +126,11 @@ exports.initCodeDatabase = () => {
 };
 
 exports.dropCodeDatabase = () => {
-  console.log('dropping authorization codes in database');
-  Code.remove({});
+  Code.deleteMany({}, (err) => {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log('dropping authorization codes in database');
+    }
+  });
 };
