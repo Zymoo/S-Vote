@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Register from './Register';
+import authHeader from "../services/auth-header";
+
 const CryptoSystem = require('../copy/cryptosystem');
 let crypto = new CryptoSystem();
 const chain = require('../copy/trufflechain');
@@ -26,7 +28,26 @@ export default class Vote extends Component {
     let encrypted = crypto.encryptVote(this.state.electionKey, vote);
     console.log(this.state.wallet.key);
     await chain.saveVote(encrypted, this.state.wallet.address, this.state.wallet.key);
-}
+    const authCode = localStorage.getItem('auth-code')
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: authHeader(),
+      },
+      body: JSON.stringify({
+        code: authCode,
+      })
+    };
+    const serverURL = "http://localhost:3001/voter/authcode/";
+    fetch(serverURL, requestOptions)
+    .then(() => {
+      //TODO remove log.
+      console.log("removed auth-code")
+      localStorage.removeItem('auth-code');
+    });
+
+  }
 
   componentDidMount() {
     const savedWallet = JSON.parse(localStorage.getItem('myGreatWallet'));

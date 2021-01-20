@@ -1,4 +1,7 @@
 const Block = require('../models/block');
+const {v4: uuidv4} = require('uuid');
+const Code = require('../models/code');
+const Role = require('../models/role');
 
 exports.saveConfig = async function(pubKey, candidates, voters, numbers) {
   const keyTransaction = pubKey;
@@ -72,8 +75,8 @@ exports.getTaggedBlockchain = async function(tag) {
   return blockchain;
 };
 
-exports.initRoleDatebase = (role) => {
-  role.estimatedDocumentCount((err, count) => {
+exports.initRoleDatebase = () => {
+  Role.estimatedDocumentCount((err, count) => {
     if (!err && count === 0) {
       new Role({
         name: 'shareholder',
@@ -93,4 +96,36 @@ exports.initRoleDatebase = (role) => {
       });
     }
   });
+};
+
+exports.initCodeDatabase = () => {
+  return new Promise((res, rej) => {
+    setTimeout(() => {
+      Code.estimatedDocumentCount((err, count) => {
+        if (!err && count !== 1000) {
+          console.log('Populating database with authorization codes');
+          const authCodes = new Set();
+          while (authCodes.size < 1000) {
+            authCodes.add(uuidv4());
+          }
+          for (const code of authCodes) {
+            new Code({
+              code: code,
+            }).save((err) => {
+              if (err) {
+                console.log('error', err);
+                rej(err);
+              }
+            });
+          }
+          res('Populated');
+        }
+      });
+    }, 5000);
+  });
+};
+
+exports.dropCodeDatabase = () => {
+  console.log('dropping authorization codes in database');
+  Code.remove({});
 };
