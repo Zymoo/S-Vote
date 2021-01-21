@@ -77,7 +77,7 @@ router.post('/begin',
       } else {
         await chain.saveConfig(pubKey, candidates, voters, candidateNumbers);
       }
-      res.status(200).send(privKey);
+      res.status(200).send(shares);
     });
 
 /**

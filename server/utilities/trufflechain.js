@@ -4,8 +4,9 @@ const provider = new Web3.providers.HttpProvider('http://localhost:7545');
 const contract = require('truffle-contract');
 const contractPath = '../truffle_contracts/build/contracts/Election.json';
 const contractJson = require(contractPath);
-const serverAddress = '0xd127daba8aD51229853802741753d4BdCfe90cE3';
-const contractAddress = '0xAa20Ca5f1a2B4D72BB3db2F490590dae9743dbD1';
+const config = require('../config.js');
+const serverAddress = config.serverAddress;
+const contractAddress = config.contractAddress;
 // IMPORTANT - after each new migration this adress will change!
 
 

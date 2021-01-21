@@ -1,8 +1,10 @@
-var Web3 = require('web3');
-var web3 = new Web3(Web3.givenProvider || 'http://localhost:7545');
+const Web3 = require('web3');
+const web3 = new Web3(Web3.givenProvider || 'http://localhost:7545');
 const provider = new Web3.providers.HttpProvider('http://localhost:7545');
 const contractJson = require('./Election.json');
-const contractAddress = '0x3FB56430bAA1E8db4aBDf61535e0Ea13C1bc9722';
+const config = require('../config');
+const contractAddress = config.contractAddress;
+console.log(contractAddress);
 // IMPORTANT - after each new migration this adress will change!
 
 
