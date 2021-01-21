@@ -17,7 +17,7 @@ const isAuth = require('./utilities/middleware/authJwt').verifyToken;
 const {
   initRoleDatebase,
   initCodeDatabase /* , dropCodeDatabase*/,
-  dropCodeDatabase,
+  // dropCodeDatabase,
 } = require('./utilities/database');
 const app = express();
 app.use(cors());

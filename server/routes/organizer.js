@@ -112,8 +112,8 @@ router.post('/end',
             .getEphermalKey(resultcipher, privKey, pubKey);
         const scores = cryptography.calculateScore(result.toString(),
             req.app.locals.numbers);
-            console.log("XXXXXXXXXXXXXXXXXXX");
-            console.log(scores);
+        console.log('XXXXXXXXXXXXXXXXXXX');
+        console.log(scores);
         if (req.app.locals.dbsave) {
           await database.saveResult(result.toString(), scores, ephermal);
         } else {
