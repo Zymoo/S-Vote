@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 import Register from './Register';
 import authHeader from "../services/auth-header";
 
@@ -14,11 +15,12 @@ export default class Vote extends Component {
       names: null,
       numbers: null,
       electionKey: null,
-      candidate: null
+      candidate: null,
+      success: null
     }
   }
 
-  setGender(event) {
+  setCandidate(event) {
     this.setState({ candidate: event.target.value});
   }
 
@@ -26,7 +28,6 @@ export default class Vote extends Component {
     event.preventDefault();
     let vote = this.state.candidate;
     let encrypted = crypto.encryptVote(this.state.electionKey, vote);
-    console.log(this.state.wallet.key);
     await chain.saveVote(encrypted, this.state.wallet.address, this.state.wallet.key);
     const authCode = localStorage.getItem('auth-code')
     const requestOptions = {
@@ -42,9 +43,10 @@ export default class Vote extends Component {
     const serverURL = "http://localhost:3001/voter/authcode/";
     fetch(serverURL, requestOptions)
     .then(() => {
-      //TODO remove log.
+      this.setState({ success: true});
       console.log("removed auth-code")
       localStorage.removeItem('auth-code');
+      
     });
 
   }
@@ -76,7 +78,7 @@ export default class Vote extends Component {
 
   render() {
     let choice = '';
-    if (this.state.names) {
+    if (this.state.names && !this.state.success) {
       choice = (
         <div className="inner">
         <ul className="list-group">
@@ -85,7 +87,7 @@ export default class Vote extends Component {
               (this.state.names).map((name, i) => {
                 return (
                   <li className="list-group-item center-block text-center" key={`poll-${i}`}>
-                    <input value ={i} onChange={this.setGender.bind(this)} type="radio" name="candidate" id={i} />
+                    <input value ={i} onChange={this.setCandidate.bind(this)} type="radio" name="candidate" id={i} />
                     <i className="center-block text-center" aria-hidden="true"> {name} </i>
                   </li>
                 )
@@ -96,6 +98,16 @@ export default class Vote extends Component {
         </ul>
         </div>
       )
+    }
+    else {
+      if(this.state.success){
+        choice = (
+          <div className="container-fluid">
+            <h3> Well done, you successfully voted for {this.state.names[this.state.candidate]} </h3>
+            <Link className="btn btn-dark btn-lg btn-block" to={"/result"}> Finish </Link>
+          </div>
+        )
+      }
     }
     if (this.state.wallet) {
       return (

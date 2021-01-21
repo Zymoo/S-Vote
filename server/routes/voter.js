@@ -104,4 +104,24 @@ router.get('/data', async function(req, res, next) {
   res.status(200).send(result);
 });
 
+
+/**
+ * Gets election results.
+ * @returns {result}
+ */
+router.get('/result', async function(req, res, next) {
+  let candidates;
+  let result;
+  if (req.app.locals.dbsave) {
+    candidates = await database.getTaggedBlockchain('candidate');
+    result = await database.getTaggedBlockchain('result');
+  } else {
+    candidates = await chain.getCandidates();
+    result = await chain.getResult();
+  }
+  console.log(result);
+  res.status(200).send({candidates: candidates, results: result});
+});
+
+
 module.exports = router;

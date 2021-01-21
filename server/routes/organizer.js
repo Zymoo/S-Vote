@@ -77,7 +77,7 @@ router.post('/begin',
       } else {
         await chain.saveConfig(pubKey, candidates, voters, candidateNumbers);
       }
-      res.status(200).send(privKey);
+      res.status(200).send(shares);
     });
 
 /**
@@ -112,6 +112,8 @@ router.post('/end',
             .getEphermalKey(resultcipher, privKey, pubKey);
         const scores = cryptography.calculateScore(result.toString(),
             req.app.locals.numbers);
+        console.log('XXXXXXXXXXXXXXXXXXX');
+        console.log(scores);
         if (req.app.locals.dbsave) {
           await database.saveResult(result.toString(), scores, ephermal);
         } else {
