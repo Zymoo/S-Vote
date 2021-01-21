@@ -2,7 +2,7 @@ import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Register from "./components/Register";
-import Vote from "./components/Vote";
+import Result from "./components/Result";
 import { fetchUtils, Admin, Resource } from "react-admin";
 import simpleRestProvider from "ra-data-simple-rest";
 import authProvider from "./utils/authProvider";
@@ -10,6 +10,7 @@ import Login from "./containers/Login";
 import Menu from "./containers/Menu";
 
 import Dashboard from "./Dashboard";
+import Vote from "./components/Vote";
 
 const fetchJson = (url, options = {}) => {
   if (!options.headers) {
@@ -42,8 +43,8 @@ const App = () => {
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to={"/vote"}>
-                    Vote
+                  <Link className="nav-link" to={"/result"}>
+                    Result
                   </Link>
                 </li>
               </ul>
@@ -66,6 +67,7 @@ const App = () => {
               </Admin>
             </Route>
             <Route path="/sign-up" component={Register} />
+            <Route path="/result" component={Result} />
             <Route path="/vote" component={Vote} />
           </Switch>
         </div>

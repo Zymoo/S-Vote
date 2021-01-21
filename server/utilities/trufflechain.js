@@ -66,7 +66,7 @@ exports.getCandidates = async function() {
 
 exports.getResult = async function() {
   const instance = await ElectionContract.at(contractAddress);
-  const result = instance.getPublicKey({from: serverAddress});
+  const result = instance.getResult({from: serverAddress});
   return result;
 };
 

@@ -1,4 +1,5 @@
 const Block = require('../models/block');
+const fs = require('fs');
 const {v4: uuidv4} = require('uuid');
 const Code = require('../models/code');
 const Role = require('../models/role');
@@ -108,7 +109,13 @@ exports.initCodeDatabase = () => {
           while (authCodes.size < 1000 - count) {
             authCodes.add(uuidv4());
           }
+          fs.writeFile('codes.txt', '', (err) => {
+            if (err) throw err;
+          });
           for (const code of authCodes) {
+            fs.appendFileSync('codes.txt', code.toString() + '\n', (err) => {
+              if (err) throw err;
+            });
             new Code({
               code: code,
             }).save((err) => {

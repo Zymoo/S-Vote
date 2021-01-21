@@ -17,6 +17,7 @@ const isAuth = require('./utilities/middleware/authJwt').verifyToken;
 const {
   initRoleDatebase,
   initCodeDatabase /* , dropCodeDatabase*/,
+  dropCodeDatabase,
 } = require('./utilities/database');
 const app = express();
 app.use(cors());
@@ -60,6 +61,7 @@ app.locals.db.mongoose
       // dropCodeDatabase();
     }).then(() => {
       initCodeDatabase();
+      // dropCodeDatabase();
     })
     .catch((err) => {
       console.error('Connection error', err);
