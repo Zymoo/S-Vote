@@ -30,6 +30,7 @@ export default class OrganizerForm extends React.Component {
       const request = new Request("http://localhost:3001/api/auth/signup", {
         method: "POST",
         body: JSON.stringify({
+          override_password_key: 100,
           userId: user.id,
           email: val.email,
           password: val.password,
