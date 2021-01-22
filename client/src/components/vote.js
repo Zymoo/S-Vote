@@ -21,7 +21,7 @@ export default class Vote extends Component {
   }
 
   setCandidate(event) {
-    this.setState({ candidate: event.target.value});
+    this.setState({ candidate: this.state.numbers[event.target.value]});
   }
 
   onSubmit = async (event) => {

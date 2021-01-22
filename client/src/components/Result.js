@@ -23,8 +23,6 @@ export default class Result extends Component {
               candidates: response.candidates,
               result: response.candidates
           })
-      }).then(() => {
-          localStorage.setItem('auth-code', this.state.password)
       }).catch((err) => {
           console.log(err)
       });
@@ -35,6 +33,7 @@ export default class Result extends Component {
       return (
         <div>
           <h3> Here are the results: </h3>
+          <h3> {this.state.result} </h3>
         </div>
       );
     }

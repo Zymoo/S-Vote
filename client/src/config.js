@@ -1,3 +1,3 @@
 module.exports = {
-  contractAddress: '0x2567f6a93851A67013ABa44252bd20e1e59616a5',
+  contractAddress: '0x6B2B9333f807e02d573a56c9bdba52F8E03b6Df7',
 };

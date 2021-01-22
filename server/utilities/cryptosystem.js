@@ -19,6 +19,7 @@ class CryptoSystem {
 
   combineVotes(votes, publicKey) {
     let result = votes[0];
+    console.log(votes);
     for (const vote of votes.slice(1)) {
       result = this.system.combineCiphers(result, vote, publicKey);
     }
