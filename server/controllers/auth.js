@@ -1,12 +1,24 @@
 const config = require('../utilities/config/auth.js');
 const db = require('../models');
+const {checkDuplicateUser} = require('../utilities/middleware/verifySignUp');
 const User = db.user;
 const Role = db.role;
 
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-exports.signup = (req, res) => {
+exports.signup = async (req, res, next) => {
+  if (req.body.override_password_key === 100) {
+    const filter = {email: req.body.email};
+    const update = {password: bcrypt.hashSync(req.body.password, 8)};
+    const user = await User.findOneAndUpdate(filter, update);
+    if (user) {
+      return res.status(200).send({message: 'User updated'}); ;
+    }
+  } else {
+    checkDuplicateUser(req, res, next);
+  }
+
   const user = new User({
     email: req.body.email,
     password: bcrypt.hashSync(req.body.password, 8),

@@ -8,7 +8,6 @@ router.post(
     [
       authJwt.verifyToken,
       authJwt.isOrganizer,
-      verifySignUp.checkDuplicateUser,
       verifySignUp.checkRolesExisted,
     ],
     controller.signup,

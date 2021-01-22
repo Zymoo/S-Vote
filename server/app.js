@@ -67,7 +67,7 @@ app.locals.db.mongoose
       console.error('Connection error', err);
       process.exit();
     });
-
+app.locals.db.mongoose.set('useFindAndModify', false);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
