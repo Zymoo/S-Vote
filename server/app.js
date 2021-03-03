@@ -12,6 +12,8 @@ const voterRouter = require('./routes/voter');
 const organizerRouter = require('./routes/organizer');
 const fakevoteRouter = require('./routes/fakevote');
 const authRouter = require('./routes/auth');
+const config = require('../config.js');
+const mongoDB = config.mongo;
 
 const isAuth = require('./utilities/middleware/authJwt').verifyToken;
 const {
@@ -43,9 +45,6 @@ app.use(function(req, res, next) {
 });
 app.use(isAuth);
 
-// eslint-disable-next-line no-unused-vars
-const mongoDB =
-  'mongodb+srv://server:4HyymKiNqmP3yDR@cluster0.orhvk.mongodb.net/SvoteBase?retryWrites=true&w=majority';
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
 
 app.locals.db = require('./models');

@@ -11,6 +11,7 @@ const database = require('../utilities/database');
 const nodemailer = require('nodemailer');
 const chain = require('../utilities/chain');
 const authJwt = require('../utilities/middleware/authJwt');
+const config = require('../config.js');
 
 /* Debug purpose - sanity check */
 router.get('/', function(req, res, next) {
@@ -42,8 +43,8 @@ router.post('/begin',
         host: 'smtp.mailtrap.io',
         port: 2525,
         auth: {
-          user: '28d4d8b9f0ef74',
-          pass: '5376cf56f28273',
+          user: config.user,
+          pass: config.pass,
         },
       });
 

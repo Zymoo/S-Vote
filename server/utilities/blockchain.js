@@ -1,4 +1,4 @@
-/* eslint-disable require-jsdoc */
+/** This file is to be kept for future work */
 const SCcompiler = require('../blockchain/smart-contracts-compiler');
 const Web3 = require('web3');
 const fs = require('fs-extra');
