@@ -3,7 +3,8 @@
 ## Intro
 Proposal of end-to-end verifiable distributed voting system utilizing private Ethereum network and cryptographic algorithms.
 Developed as a proof of concept for a secure online voting platform.
-This work is still in progress, currently extending it's functionality with ring signature schemes and further testing.
+
+*This work is still in progress, currently extending it's functionality with ring signature schemes and further testing.*
 
 ## Run blockchain locally (with MongoDB fallback)
 
