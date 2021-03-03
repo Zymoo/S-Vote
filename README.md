@@ -1,5 +1,10 @@
 # s-vote
 
+## Intro
+Proposal of end-to-end verifiable distributed voting system utilizing private Ethereum network and cryptographic algorithms.
+Developed as a proof of concept for a secure online voting platform.
+This work is still in progress, currently extending it's functionality with ring signature schemes and further testing.
+
 ## Run blockchain locally (with MongoDB fallback)
 
 Local blockchain follows the architecture of production environemnt. It consists of 4 containers, one server and three miner nodes. This network uses Proof of Authority. New blocks are published if there exist pending transactions.
