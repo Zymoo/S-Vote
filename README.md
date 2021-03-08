@@ -1,6 +1,5 @@
-# s-vote
+# S-vote
 
-## Intro
 Proposal of end-to-end verifiable distributed voting system utilizing private Ethereum network and cryptographic algorithms.
 Developed as a proof of concept for a secure online voting platform.
 
