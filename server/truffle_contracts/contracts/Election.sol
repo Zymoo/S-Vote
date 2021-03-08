@@ -1,6 +1,9 @@
-// SPDX-License-Identifier: GPL-3.0
+// SPDX-License-Identifier: MIT
 pragma solidity >=0.6.12;
 pragma experimental ABIEncoderV2;
+
+import "./ElectionToken.sol";
+import "./CrowdSale.sol";
 
 contract Election {
     struct Candidate {
@@ -14,25 +17,39 @@ contract Election {
         string ephermalKey;
     }
 
+    ElectionToken public token;
+    CrowdSale public crowdSale;
+
+    address admin;
     Result electionResult;
     Candidate[] candidates;
     string[] voterKeys;
     string[] votes;
     string publicKey;
 
+
+    constructor (ElectionToken _tokenContract, CrowdSale _crowdsale) public {
+      admin = msg.sender;
+      token = _tokenContract;
+      crowdSale = _crowdsale;
+    }
+
     receive() external payable {}  // allows to receive ether
 
     function savePublicKey (string memory key) public {
+        require(msg.sender == admin);
         publicKey = key;
     }
 
     function saveCandidates (string[] memory names, uint[] memory numbers) public {
+        require(msg.sender == admin);
         for (uint i = 0; i < names.length; i++){
             candidates.push(Candidate({fullName: names[i], number: numbers[i]}));
         }
     }
 
     function saveResult(uint256 sum, uint64[] memory scores, string memory ephermal) public {
+        require(msg.sender == admin);
         electionResult = Result({voteSum: sum, individualScores: scores, ephermalKey: ephermal});
     }
 
